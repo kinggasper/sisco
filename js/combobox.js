@@ -65,7 +65,7 @@
 
             this.button = $( "<button type='button'>&nbsp;</button>" )
             .attr( "tabIndex", -1 )
-            .attr( "title", "Show All Items" )
+            .attr( "title", "Mostrar todos" )
             .insertAfter( input )
             .button({
                 icons: {

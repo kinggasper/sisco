@@ -12,7 +12,6 @@ if (isset($_GET['id'])) {
 }
 if (isset($_POST['submit'])) {
     $resultado = $recibo->actualizar($_POST['recibo_id'], array("medio_pago_id" => $_POST['medio_pago_id']));
-    
 }
 // </editor-fold>
 ?>
@@ -75,6 +74,12 @@ if (isset($_POST['submit'])) {
                             <p>Ingrese los datos para modificar el medio de Pago del Recibo</p>
                         </div>
                         <div class="span16">
+                            <?php if ($reciboTemp['data'][0]['status_recibo'] == "Cobrado"): ?>
+                                <div class="alert-message warning">
+                                    <a class="close" href="#">×</a>
+                                    <p>Este Recibo ha sido cobrado. No se puede modificar el medio de pago</p>
+                                </div>
+                            <?php endif; ?>
                             <?php if ($registro['suceed'] && count($registro['data']) > 0): ?>
                                 <form method="post" action="">
                                     <?php $dato = $registro['data'][0]; ?>
@@ -107,7 +112,7 @@ if (isset($_POST['submit'])) {
                                         <div>
                                             <label for="medio_pago_id">Medio de Pago:</label>
                                             <div class="input">
-                                                <select name="medio_pago_id" class="required" id="medio_pago_id">
+                                                <select name="medio_pago_id" class="required" id="medio_pago_id" <?php echo ($reciboTemp['data'][0]['status_recibo'] == "Cobrado") ? " disabled='disabled'" : ""; ?>>
                                                     <?php foreach ($medios_pago_usuario['data'] as $mi_medio_pago): ?>
                                                         <option value="<?php echo $mi_medio_pago['id'] ?>" <?php echo ($mi_medio_pago['id'] == $registro['data'][0]['id']) ? "selected='selected'" : ""; ?>><?php echo $mi_medio_pago['medio_pago'] . ": " . $mi_medio_pago['banco'] . " " . $mi_medio_pago['numero_cuenta']; ?></option>
                                                     <?php endforeach; ?>
@@ -119,7 +124,7 @@ if (isset($_POST['submit'])) {
                                     <fieldset>
                                         <div class="actions">
                                             <input class="btn primary" type="submit" name="submit" value="Modificar"/>
-                                            <a href="../mediopago/crear/php" class="btn info">Crear nuevo Medio de Pago</a>
+                                            <a href="../mediopago/crear.php?usuario=<?php echo $registro['data'][0]['usuario_id']; ?>" class="btn info">Crear nuevo Medio de Pago</a>
                                             <input class="btn" type="reset" name="reset" value="Borrar"/>
                                         </div>
                                     </fieldset>

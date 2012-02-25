@@ -1,10 +1,5 @@
 <?php
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of mediopago
  *
@@ -35,9 +30,10 @@ class mediopago extends db implements crud {
         return $this->select("*", self::tabla);
     }
 
-    public function listar_tipo_medio_pagos(){
+    public function listar_tipo_medio_pagos() {
         return $this->select("*", self::tipo_medio_pago);
     }
+
     public function ver($id) {
         return $this->dame_query("
         select medio_pago.*, tipo_medio_pago.nombre 'medio_pago' , banco.nombre 'banco'

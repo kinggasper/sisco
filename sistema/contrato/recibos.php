@@ -55,14 +55,14 @@ if (isset($_GET['id'])) {
                                     <?php foreach ($recibos['data'] as $registro): ?>
                                         <tr>
                                             <td><?php echo $registro['id']; ?></td>
-                                            <td><?php echo  date('d/m/Y', strtotime($registro['fecha'])); ?></td>
-                                            <td><?php echo number_format($registro['monto'], 2, ',', '.') ?> Bsf.</td>
+                                            <td><?php echo misc::date_format($registro['fecha']); ?></td>
+                                            <td><?php echo misc::number_format($registro['monto']); ?> Bsf.</td>
                                             <td><?php echo $registro['status_recibo']; ?></td>
                                             <td><?php echo $registro['tipo_medio_pago']; ?></td>
                                             <td>
                                                 <a href="../mediopago/recibo.php?id=<?php echo $registro['id']; ?>" class="btn small info" title="Modificar Medio de Pago">Modificar</a>
                                                 <?php if ($registro['status_recibo'] == 'Rechazado'): ?>
-                                                <a href="../recibo/cuotas.php?id=<?php echo $registro['id']; ?>" class="btn small info" title="Revisar cuotas pagadas/por cobrar">Cuotas</a>
+                                                    <a href="../recibo/cuotas.php?id=<?php echo $registro['id']; ?>" class="btn small info" title="Revisar cuotas pagadas/por cobrar">Cuotas</a>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>

@@ -7,11 +7,12 @@ $usuario->confirmar_miembro();
 $pag->paginar("select 
     medio_pago.* , 
     banco.nombre 'banco', 
-    tipo_medio_pago.nombre 'tipo_medio_pago'
+    tipo_medio_pago.nombre 'tipo_medio_pago',
+    concat(cliente.nombre,' ', cliente.apellido) 'cliente'
     from medio_pago
     left join banco on medio_pago.banco_id = banco.id
-    inner join tipo_medio_pago on tipo_medio_pago_id = tipo_medio_pago.id
-    inner join usuario on usuario.id = usuario_id
+    left join tipo_medio_pago on tipo_medio_pago_id = tipo_medio_pago.id
+    join cliente on cliente.id = usuario_id
 ", 5);
 // </editor-fold>
 ?>
@@ -47,7 +48,7 @@ $pag->paginar("select
                     <li>Listar</li>
                 </ul>
                 <div class="row">
-                    <div class="span12">
+                    <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
                             <table class="zebra-striped bordered-table">
                                 <thead>
@@ -55,6 +56,7 @@ $pag->paginar("select
                                         <th>id</th>
                                         <th>Tipo</th>
                                         <th>N&uacute;mero</th>
+                                        <th>Cliente</th>
                                         <th>Operaciones</th>
                                     </tr>
                                 </thead>
@@ -64,6 +66,7 @@ $pag->paginar("select
                                             <td><?php echo $registro['id']; ?></td>
                                             <td><?php echo $registro['tipo_medio_pago']; ?></td>
                                             <td><?php echo $registro['numero_cuenta']; ?></td>
+                                            <td><?php echo $registro['cliente']; ?></td>
                                             <td>
                                                 <a href="modificar.php?id=<?php echo $registro['id']; ?>" class="btn small info">Modificar</a>
                                                 <a href="borrar.php?id=<?php echo $registro['id']; ?>" class="btn small danger">Eliminar</a>

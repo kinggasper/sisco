@@ -72,7 +72,7 @@ $monto_pendiente = 0;
                                         ?>
                                         <tr>
                                             <td><?php echo $registro['id']; ?></td>
-                                            <td><?php echo number_format($registro['monto'], 2, ',', '.'); ?> Bsf.</td>
+                                            <td><?php echo misc::number_format($registro['monto']); ?> Bsf.</td>
                                             <td><span class="label <?php
                                 switch ($registro['status']) {
                                     case 'Rechazado':
