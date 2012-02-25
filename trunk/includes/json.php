@@ -8,6 +8,10 @@ switch ($_GET['accion']) {
     case 'query':
         $result = $db->dame_query("select * from bitacora");
         break;
+    case 'clientes_organismo':
+        $cliente = new cliente();
+        $result = $cliente->clientes_por_organismo($_GET['organismo']);
+        break;
     default:
         $result = array("suceed" => false, "error" => "No ha seleccionado ninguna acción");
         break;
