@@ -74,6 +74,7 @@ if (isset($_POST['submit'])) {
                         </div>
                         <div class="span16">
                             <form method="post" action="">
+                                <input type="hidden" name="empresa_id" value=" <?php echo $_SESSION['usuario']['empresa_id']; ?>"/>
                                 <fieldset>
                                         <legend>Datos del producto</legend>
                                         <div class="clearfix">
@@ -86,16 +87,6 @@ if (isset($_POST['submit'])) {
                                             <label for="nombre">Nombre:<sup>*</sup></label>
                                             <div class="input">
                                                 <input class="required" type="text" name="nombre" id="nombre"/> 
-                                            </div>
-                                        </div>
-                                        <div class="clearfix">
-                                            <label for="empresa">Empresa:<sup>*</sup></label>
-                                            <div class="input">
-                                                <select class="required" name="empresa_id" id="empresa">
-                                                    <?php foreach ($empresas['data'] as $empresa): ?>
-                                                    <option value="<?php echo $empresa['id']; ?>"><?php echo $empresa['nombre']; ?></option>
-                                                    <?php endforeach; ?>
-                                                </select>
                                             </div>
                                         </div>
                                         <div class="clearfix">
