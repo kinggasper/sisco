@@ -624,11 +624,18 @@ Class Misc {
  * @param type $anio el año
  * @return string la cadena formateada
  */
-    public static function url_carro($marca, $modelo, $anio) {
-        $result = strtolower(str_replace(" ", "-", $marca));
-        $result .= "-" . strtolower(str_replace(" ", "-", $modelo));
-        $result .= "-" . $anio;
-        return $result;
+
+    public static function number_format($numero){
+        return number_format($numero, 2, ',', '.');
+    }
+    public static function date_format($fecha){
+        return date('d/m/Y',  strtotime($fecha));
+    }
+    public static function phone_format($phone){
+        return substr($phone, 0, 4)."-".substr($phone, 4, 3).".".substr($phone, 7, 2).".".substr($phone, 9, 2);
+    }
+    public static function account_format($number){
+        return substr($number, 0, 4)."-".substr($number, 4, 4)."-".substr($number, 8, 4)."-".substr($number, 12, 4)."-".substr($number, 16, 4);
     }
 
 }

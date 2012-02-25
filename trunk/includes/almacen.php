@@ -150,21 +150,16 @@ on duplicate key update cantidad = cantidad + $cantidad;");
     }
 
     public function verificar_existencias() {
-        $producto = new producto();
-        $productos = $producto->listar();
-        $productos_faltantes = array();
-        foreach ($productos['data'] as $registro) {
-            $existencia_almacen = $this->dame_query("select * from producto_almacen where producto_id={$registro['id']}");
-            if (count($existencia_almacen['data']) > 0) {
-                foreach ($existencia_almacen['data'] as $almacen) {
-                    if ($almacen['cantidad'] < $registro['cantidad_minima']) {
-                        array_push($productos_faltantes, array("producto_id" => $registro['id'],
-                            "almacen_id" => $almacen['almacen_id']));
-                    }
-                }
-            }
-        }
-        return $productos_faltantes;
+        return $this->dame_query("
+            select 
+                producto.id 'producto_id', producto.nombre 'producto', 
+                almacen.id 'almacen_id', almacen.nombre 'almacen',
+                producto.cantidad_minima, ifnull(producto_almacen.cantidad, 0)'existencia'
+                from producto 
+                    left outer join producto_almacen on producto.id = producto_almacen.producto_id
+                    left outer join almacen on almacen.id = producto_almacen.almacen_id
+                        where ifnull(producto_almacen.cantidad, 0) < producto.cantidad_minima
+                            order by producto.id");
     }
 
 }

@@ -5,12 +5,16 @@ $usuario = new usuario();
 $usuario->confirmar_miembro();
 //require '../../includes/paginacion.php';
 $pag = new paginacion();
-$pag->paginar("select almacen.id, almacen.nombre nombre, count(producto_id) productos
-    from almacen 
-    left outer join producto_almacen on almacen.id = producto_almacen.almacen_id
-    where empresa_id ={$_SESSION['usuario']['empresa_id']}
-    group by almacen.id", 5);
-echo "empresa".$_SESSION['usuario']['empresa_id'];
+$pag->paginar("select 
+    producto.id 'producto_id', producto.nombre 'producto', 
+    almacen.id 'almacen_id', almacen.nombre 'almacen',
+    producto.cantidad_minima, ifnull(producto_almacen.cantidad, 0)'existencia'
+    from producto 
+        left outer join producto_almacen on producto.id = producto_almacen.producto_id
+        left outer join almacen on almacen.id = producto_almacen.almacen_id
+            where ifnull(producto_almacen.cantidad, 0) < producto.cantidad_minima
+            and producto.empresa_id ={$_SESSION['usuario']['empresa_id']}
+                order by producto.id", 5);
 // </editor-fold>
 ?>
 <!DOCTYPE html>
@@ -37,12 +41,12 @@ echo "empresa".$_SESSION['usuario']['empresa_id'];
         <div class="container">
             <div class="content">
                 <div class="page-header">
-                    <h1>Listar almacenes <small> almacenes disponibles</small> </h1>
+                    <h1>Productos Faltantes <small> por almacen</small> </h1>
                 </div>
                 <ul class="breadcrumb">
                     <li><a href="../usuario">Sistema</a><span class="divider">&raquo;</span></li>
                     <li><a href="listar.php">Almacen</a><span class="divider">&raquo;</span></li>
-                    <li>Listar</li>
+                    <li>Productos Faltantes</li>
                 </ul>
                 <div class="row">
                     <div class="span16">
@@ -50,22 +54,24 @@ echo "empresa".$_SESSION['usuario']['empresa_id'];
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>Nombre</th>
-                                        <th>Productos</th>
+                                        <th>Producto</th>
+                                        <th>Almacen</th>
+                                        <th>Cantidad minima</th>
+                                        <th>Existencia</th>
                                         <th>Operaciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($pag->registros as $registro): ?>
                                         <tr>
-                                            <td><?php echo $registro['id']; ?></td>
-                                            <td><?php echo $registro['nombre']; ?></td>
-                                            <td><?php echo $registro['productos']; ?></td>
+                                            <td><?php echo $registro['producto']; ?></td>
+                                            <td><?php echo $registro['almacen']; ?></td>
+                                            <td><?php echo $registro['cantidad_minima']; ?></td>
+                                            <td><?php echo $registro['existencia']; ?></td>
                                             <td>
-                                                <a href="productos.php?id=<?php echo $registro['id']; ?>" class="btn small">Ver Productos</a>
-                                                <a href="modificar.php?id=<?php echo $registro['id']; ?>" class="btn small info">Modificar</a>
-                                                <a href="borrar.php?id=<?php echo $registro['id']; ?>" class="btn small danger">Eliminar</a>
+                                                <?php if ($registro['existencia'] > 0): ?>
+                                                <a href="../producto/traspasar.php?almacen=<?php echo $registro['almacen_id'];?>&producto=<?php echo $registro['producto_id'];?>" class="btn info">Traspasar</a>
+                                                <?php endif; ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -79,12 +85,11 @@ echo "empresa".$_SESSION['usuario']['empresa_id'];
                                 </tfoot>
                             </table>
                         <?php else: ?>
-                        <div class="alert-message">No hay resultados que mostrar</div>
+                            <div class="alert-message">No hay resultados que mostrar</div>
                         <?php endif; ?>
                         <div class="actions">
                             <a href="crear.php" class="btn small primary">Crear almacen</a>
                             <a href="ordenDeCompra.php" class="btn small">Orden de compra</a>
-                            <a href="productos_faltantes.php" class="btn small">Productos Faltantes</a>
                             <a href="../usuario" class="btn small ">Volver al menu</a>
                         </div>
                     </div>

@@ -4,11 +4,12 @@ require '../../includes/constants.php';
 $mediopago = new mediopago();
 $usuario = new usuario();
 $usuario->confirmar_miembro();
+$cliente = new cliente();
 $tipos_medio_pago = $mediopago->listar_tipo_medio_pagos();
 $bancos = $mediopago->select("*", "banco");
 $resultado = array("suceed" => false);
 if (isset($_GET['usuario'])) {
-    $usuario_temp = $usuario->ver($_GET['usuario']);
+    $usuario_temp = $cliente->ver($_GET['usuario']);
     $usuario_temp = $usuario_temp['data'][0];
 }
 if (isset($_POST['submit'])) {
@@ -124,7 +125,7 @@ if (isset($_POST['submit'])) {
                                         <label>Usuario</label>
                                         <div class="input">
                                             <input type="hidden" name="usuario_id" value="<?php echo $usuario_temp['id'] ?>"/>
-                                            <input type="text" name="usuario" value="<?php echo $usuario_temp['Nombre']; ?>" disabled="true"/>
+                                            <input type="text" name="usuario" value="<?php echo $usuario_temp['Nombre']." ".$usuario_temp['Apellido']; ?>" disabled="true"/>
                                         </div>
                                     </div>
                                 </fieldset>
