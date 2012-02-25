@@ -24,6 +24,10 @@ class vendedor extends db implements crud {
     public function ver($id) {
         return $this->dame_query("select * from ".self::tabla." where id=".$id);
     }
+    public function vendedor_por_empresa($empresa){
+        return $this->dame_query("select * from ".self::tabla." where empresa_id=".$empresa);
+        
+    }
 }
 
 ?>

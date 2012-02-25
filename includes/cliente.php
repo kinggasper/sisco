@@ -6,13 +6,15 @@
  * @author Anyul Rivas
  */
 class cliente extends db implements crud {
+
     const tabla = "cliente";
+
     public function actualizar($id, $data) {
-        return $this->update(self::tabla, $data, array("id"=>$id));
+        return $this->update(self::tabla, $data, array("id" => $id));
     }
 
     public function borrar($id) {
-        return $this->delete(self::tabla, array("id"=>$id));
+        return $this->delete(self::tabla, array("id" => $id));
     }
 
     public function insertar($data) {
@@ -20,13 +22,18 @@ class cliente extends db implements crud {
     }
 
     public function listar() {
-        return $this->dame_query("select * from usuario");
+        return $this->dame_query("select * from cliente");
     }
 
     public function ver($id) {
         return $this->dame_query("select cliente.*, organismo.nombre organismo from cliente 
-inner join organismo on cliente.organismo_id = organismo.id where cliente.id=".$id);
+inner join organismo on cliente.organismo_id = organismo.id where cliente.id=" . $id);
     }
+
+    public function clientes_por_organismo($organismo) {
+        return $this->dame_query("select * from cliente WHERE organismo_id =$organismo ");
+    }
+
 }
 
 ?>
