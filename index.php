@@ -1,0 +1,31 @@
+<?php
+include 'includes/constants.php';
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title><?php echo TITULO; ?></title>
+        <link href="<?php echo ROOT; ?>/css/bootstrap.min.css" rel="stylesheet" media="all"/>
+        <link href="<?php echo ROOT; ?>/css/style.css" rel="stylesheet" media="all"/>
+        <script type="text/javascript" src="<?php echo ROOT; ?>/js/jquery-1.7.1.min.js"></script>
+        <script type="text/javascript" src="<?php echo ROOT; ?>/js/jquery-ui-1.8.16.custom.min.js"></script>
+    </head>
+    <body>
+        <?php include TEMPLATE . 'topbar.php'; ?>
+        <div class="container">
+            <div class="content">
+                <div class="page-header">
+                    <h1>SISCO<small> Sistema Integrado de Cobranzas Online</small></h1>
+                </div>
+                <div class="hero-unit">
+                    <h1>Bienvenido</h1>
+                    <p>Por favor inicie sesi&oacute;n para utilizar el sistema.</p>
+                </div>
+            </div>
+            <footer>
+                <p>&copy; Aled Multimedia Solutions 2011</p>
+            </footer>
+        </div>
+    </body>
+</html>

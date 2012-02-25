@@ -1,0 +1,51 @@
+body > .container{
+    padding: 60px 5px 0;
+    background-color: rgba(255,255,255,0.9);
+    border-radius:0 0 10px 10px;
+}
+.container > input{
+    height: 28px;
+}
+.container p:first-letter{
+    text-transform: capitalize;
+}
+footer{
+    text-align: center;
+}
+label sup{
+    color: red;
+}
+label:first-letter{
+    text-transform: capitalize;
+}
+label.error{
+    color:red;
+    display:block;
+    font-size:10px;
+    /*float:right;*/
+}
+
+body {
+    background-color: #383852;
+    background: -webkit-linear-gradient(top, rgba(181,189,200,1) 0%,rgba(130,140,149,1) 36%,rgba(40,52,59,1) 100%);
+    min-height: 682px;
+}
+#productos tfoot span.help-inline{
+    color:red!important;
+}
+/*Jquery UI*/
+.ui-autocomplete {
+    max-height: 100px;
+    overflow-y: auto;
+    /* prevent horizontal scrollbar */
+    overflow-x: hidden;
+    /* add padding to account for vertical scrollbar */
+    padding-right: 20px;
+}
+/* IE 6 doesn't support max-height
+ * we use height instead, but this forces the menu to always be this tall
+*/
+* html .ui-autocomplete {
+    height: 100px;
+}
+/* fin Jquery UI */
