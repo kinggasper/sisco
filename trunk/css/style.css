@@ -49,3 +49,6 @@ body {
     height: 100px;
 }
 /* fin Jquery UI */
+.content table thead th{
+    text-transform: capitalize;
+}

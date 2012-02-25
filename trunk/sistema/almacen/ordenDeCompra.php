@@ -84,6 +84,11 @@ if (isset($_POST['procesar'])) {
                 });
             });    
         </script>
+        <style media="all" type="text/css">
+            .ui-button { margin-left: -1px; }
+            .ui-button-icon-only .ui-button-text { padding: 0.35em; } 
+            .ui-autocomplete-input { margin: 0; padding: 0.48em 0 0.47em 0.45em; }​
+        </style>
     </head>
     <body>
         <?php include TEMPLATE . 'topbar.php'; ?>
