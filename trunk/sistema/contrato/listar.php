@@ -1,9 +1,18 @@
 <?php
+
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
 $pag = new paginacion();
-$pag->paginar("SELECT c.*, e.nombre as empresa FROM contrato c inner join empresa e on c.empresa_id = e.id", 5);
-
+$query = "SELECT c.*, e.nombre as empresa , o.nombre as organismo,
+    ec.nombre as estatus_contrato, concat(cli.Nombre, ' ', cli.Apellido) as cliente,
+    ' ' as medio_pago,v.nombre as vendedor
+    from contrato c 
+    inner join empresa e on c.empresa_id = e.id
+    inner join organismo o on c.organismo_id = o.id
+    inner join status_contrato ec on c.status_contrato_id = ec.id 
+    inner join cliente cli on c.cliente_id = cli.id
+    inner join vendedor v on c.vendedor_id = c.id";
+$pag->paginar($query, 5);
 
 // </editor-fold>
 
@@ -54,9 +63,9 @@ $pag->paginar("SELECT c.*, e.nombre as empresa FROM contrato c inner join empres
                                         <th>Comision</th>
                                         <th>Vendedor</th>
                                         <th>Com. Vend.</th>
-                                        <th>Producto</th>
-                                        <th>Precio</th>
+                                        <th>Monto</th>
                                         <th>Frecuencia</th>
+                                        <th>Opciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,16 +74,15 @@ $pag->paginar("SELECT c.*, e.nombre as empresa FROM contrato c inner join empres
                                             <td><?php echo $registro['id']; ?></td>
                                             <td><?php echo $registro['numero']; ?></td>
                                             <td><?php echo $registro['empresa']; ?></td>
-                                            <td><?php echo $registro['organismo_id']; ?></td>
-                                            <td><?php echo $registro['estatus_contrato_id']; ?></td>
-                                            <td><?php echo $registro['cliente_id']; ?></td>
-                                            <td><?php echo $registro['medio_pago_id']; ?></td>
+                                            <td><?php echo $registro['organismo']; ?></td>
+                                            <td><?php echo $registro['estatus_contrato']; ?></td>
+                                            <td><?php echo $registro['cliente']; ?></td>
+                                            <td><?php echo $registro['medio_pago']; ?></td>
                                             <td><?php echo $registro['fecha']; ?></td>
-                                            <td><?php echo $registro['comision']; ?></td>
-                                            <td><?php echo $registro['vendedor_id']; ?></td>
                                             <td><?php echo $registro['comision_vendedor']; ?></td>
-                                            <td><?php echo $registro['producto_id']; ?></td>
-                                            <td><?php echo $registro['precio_producto']; ?></td>
+                                            <td><?php echo $registro['vendedor']; ?></td>
+                                            <td><?php echo $registro['porcentaje_vendedor']; ?></td>
+                                            <td><?php echo $registro['monto']; ?></td>
                                             <td><?php echo $registro['frecuencia_id']; ?></td>
                                             <td>
                                                 <a href="modificar.php?id=<?php echo $registro['id']; ?>" class="btn small info">Modificar</a>
