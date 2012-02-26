@@ -87,15 +87,23 @@ if (isset($_POST['submit'])) {
                     $("#numero_productos").html($("#productos tbody tr").length);
                 });
                 $("#sel_producto").change(function() {
-                    $("#disponible").attr("value",0);
-                    $("#costo").attr("value",0);
-                    $("#cantidad").attr("value",0)
-                    $.get("productosDisponibles.php",{id: this.value},
+                    
+                    $.getJSON('<?php echo ROOT; ?>/includes/json.php', {accion:'producto_existencia', id:$(this).val()}, 
+                    function(data){
+                        $("#disponible").attr("value",0);
+                        $("#costo").attr("value",0);
+                        $("#cantidad").attr("value",0);
+                        if(data.suceed){
+                            $("#disponible").attr("value",data.data[0].disponible );
+                            $("#costo").attr("value",data.data[0].precio_venta);
+                        }
+                    });
+                    /*$.get("productosDisponibles.php",{id: this.value},
                     function(data) {
                         var producto = data.split("|");
                         $("#disponible").attr("value",producto[0]);
                         $("#costo").attr("value",producto[1])
-                    });
+                    });*/
                 });
 
             });
