@@ -12,6 +12,11 @@ switch ($_GET['accion']) {
         $cliente = new cliente();
         $result = $cliente->clientes_por_organismo($_GET['organismo']);
         break;
+    case 'producto_existencia':
+        $producto = new producto();
+        $result = $producto->disponible($_GET['id']);
+        break;
+    
     default:
         $result = array("suceed" => false, "error" => "No ha seleccionado ninguna acción");
         break;
