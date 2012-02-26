@@ -73,6 +73,11 @@ $usuario->confirmar_miembro();
                         <p>Administrar Vendedores disponibles</p>
                         <a class="btn info small" href="../vendedor/listar.php">Entrar</a>
                     </div>
+                    <div class="span4">
+                        <h2>Contratos</h2>
+                        <p>Administración de contratos</p>
+                        <a class="btn info small" href="../contrato/listar.php">Entrar</a>
+                    </div>
                 </div>
             </div>
             <footer>
