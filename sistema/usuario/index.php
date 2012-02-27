@@ -79,6 +79,29 @@ $usuario->confirmar_miembro();
                         <a class="btn info small" href="../contrato/listar.php">Entrar</a>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="span4">
+                        <h2>Contratos</h2>
+                        <p>Emite y revisa contratos emitidos</p>
+                        <a href="../contrato/listar.php" class="btn small info">Entrar</a>
+                    </div>
+                    <div class="span4">
+                        <h2>Lotes</h2>
+                        <p>Crea y carga lote de cobros</p>
+                        <a href="../lote/listar.php" class="btn small info">Entrar</a>
+                    </div>
+                    <div class="span4">
+                        <h2>Bitacora</h2>
+                        <p>Revisa la bitacora del sistema</p>
+                        <a href="../bitacora/listar.php" class="btn small info">Entrar</a>
+                    </div>
+                    <div class="span4">
+                        <h2></h2>
+                        <p></p>
+                        <a href="" class="btn small info">Entrar</a>
+
+                    </div>
+                </div>
             </div>
             <footer>
                 <p>&copy; Aled Multimedia Solutions 2011</p>
