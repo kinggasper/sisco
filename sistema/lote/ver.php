@@ -5,8 +5,14 @@ $pag = new paginacion();
 $usuario = new usuario();
 $usuario->confirmar_miembro();
 $pag->paginar("
-SELECT * from lote_detalle
+SELECT lote_detalle.*, 
+        contrato.fecha,
+         contrato.numero,
+        recibo.id recibo_id,
+        recibo.monto
+        from lote_detalle
 inner join recibo on lote_detalle.recibo_id=recibo.id
+inner join contrato on contrato.id = recibo.contrato_id
  where lote_detalle.lote_id={$_GET['id']}", 5);
 // </editor-fold>
 ?>
@@ -49,6 +55,8 @@ inner join recibo on lote_detalle.recibo_id=recibo.id
                                     <tr>
                                         <th>id</th>
                                         <th>Fecha</th>
+                                        <th>Contrato</th>
+                                        <th>Recibo</th>
                                         <th>Monto</th>
                                     </tr>
                                 </thead>
@@ -57,6 +65,8 @@ inner join recibo on lote_detalle.recibo_id=recibo.id
                                         <tr>
                                             <td><?php echo $registro['id']; ?></td>
                                             <td><?php echo misc::date_format($registro['fecha']); ?></td>
+                                            <td><?php echo $registro['numero']; ?></td>
+                                            <td><?php echo $registro['recibo_id']; ?></td>
                                             <td><?php echo misc::number_format($registro['monto']); ?> Bsf.</td>
                                         </tr>
                                     <?php endforeach; ?>
