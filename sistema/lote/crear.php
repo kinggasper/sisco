@@ -53,7 +53,8 @@ $tipos_medio_pago = $mediopago->listar_tipo_medio_pagos();
                 <?php if (isset($_POST['enviar']) && $resultado['suceed'] == true): ?>
                     <div class="alert-message block-message success">
                         <a class="close" href="#">×</a>
-                        <p>Organismo creado con <strong>&Eacute;xito.</strong></p>
+                        <p>Lote creado con <strong>&Eacute;xito.</strong></p>
+                        <p>En unos segundos se descargara el archivo</p>
                         <a class="btn small primary" href="listar.php">Volver al listado.</a>
                         <a class="btn small" href="../usuario">Volver al men&uacute;.</a>
                     </div>
@@ -61,7 +62,7 @@ $tipos_medio_pago = $mediopago->listar_tipo_medio_pagos();
                     <?php if (isset($_POST['submit']) && isset($resultado['suceed']) && !$resultado['suceed']): ?>
                         <div class="alert-message block-message error">
                             <a class="close" href="#">×</a>
-                            <p>Ha ocurrido un error al registrar el organismo.</p>
+                            <p>Ha ocurrido un error al crear el lote.</p>
                             <?php if (DEBUG): ?>
                                 <pre><?php var_dump($resultado); ?></pre>
                             <?php endif; ?>
