@@ -2,17 +2,23 @@
 
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
+$usuario = new usuario();
+$usuario->confirmar_miembro();
 $pag = new paginacion();
-$query = "SELECT c.*, e.nombre as empresa , o.nombre as organismo,
-    ec.nombre as estatus_contrato, concat(cli.Nombre, ' ', cli.Apellido) as cliente,
-    ' ' as medio_pago,v.nombre as vendedor
-    from contrato c 
-    inner join empresa e on c.empresa_id = e.id
-    inner join organismo o on c.organismo_id = o.id
-    inner join status_contrato ec on c.status_contrato_id = ec.id 
-    inner join cliente cli on c.cliente_id = cli.id
-    inner join vendedor v on c.vendedor_id = c.id";
-$pag->paginar($query, 5);
+$pag->paginar("SELECT c.*,
+        status_contrato.nombre 'status_contrato',
+        organismo.nombre 'organismo',
+        concat(cliente.Nombre, ' ', cliente.Apellido) cliente,
+        vendedor.Nombre vendedor,
+        frecuencia.nombre frecuencia
+    FROM contrato c 
+    inner join status_contrato on status_contrato.id = c.status_contrato_id
+    inner join organismo on c.organismo_id = organismo.id
+    inner join cliente on c.cliente_id = cliente.id
+    inner join vendedor on c.vendedor_id = vendedor.id
+    inner join frecuencia on frecuencia.id = c.frecuencia_id
+    where c.empresa_id = {$_SESSION['usuario']['empresa_id']}", 5);
+
 
 // </editor-fold>
 
@@ -47,25 +53,22 @@ $pag->paginar($query, 5);
                     <li>Contratos</li>
                 </ul>
                 <div class="row">
-                    <div class="span12">
+                    <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
                                         <th>id</th>
                                         <th>Número</th>
-                                        <th>Empresa</th>
                                         <th>Organismo</th>
-                                        <th>Estatus</th>
                                         <th>Cliente</th>
-                                        <th>Medio de pago</th>
                                         <th>Fecha</th>
-                                        <th>Comision</th>
-                                        <th>Vendedor</th>
-                                        <th>Com. Vend.</th>
                                         <th>Monto</th>
+                                        <th>Vendedor</th>
+                                        <th>Comosion Vendedor</th>
                                         <th>Frecuencia</th>
-                                        <th>Opciones</th>
+                                        <th>Estatus</th>
+                                        <th>Operaciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -73,17 +76,14 @@ $pag->paginar($query, 5);
                                         <tr>
                                             <td><?php echo $registro['id']; ?></td>
                                             <td><?php echo $registro['numero']; ?></td>
-                                            <td><?php echo $registro['empresa']; ?></td>
                                             <td><?php echo $registro['organismo']; ?></td>
-                                            <td><?php echo $registro['estatus_contrato']; ?></td>
                                             <td><?php echo $registro['cliente']; ?></td>
-                                            <td><?php echo $registro['medio_pago']; ?></td>
-                                            <td><?php echo $registro['fecha']; ?></td>
-                                            <td><?php echo $registro['comision_vendedor']; ?></td>
+                                            <td><?php echo misc::date_format($registro['fecha']); ?></td>
+                                            <td><?php echo misc::number_format($registro['monto']); ?> Bsf.</td>
                                             <td><?php echo $registro['vendedor']; ?></td>
-                                            <td><?php echo $registro['porcentaje_vendedor']; ?></td>
-                                            <td><?php echo $registro['monto']; ?></td>
-                                            <td><?php echo $registro['frecuencia_id']; ?></td>
+                                            <td><?php echo misc::number_format($registro['comision_vendedor']); ?> Bsf.</td>
+                                            <td><?php echo $registro['frecuencia']; ?></td>
+                                            <td><?php echo $registro['status_contrato']; ?></td>
                                             <td>
                                                 <a href="modificar.php?id=<?php echo $registro['id']; ?>" class="btn small info">Modificar</a>
                                                 <a href="borrar.php?id=<?php echo $registro['id']; ?>" class="btn small danger">Eliminar</a>
