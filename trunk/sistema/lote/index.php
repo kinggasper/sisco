@@ -24,8 +24,8 @@ $usuario->confirmar_miembro();
                     <h1>Gestion de Lotes</h1>
                     <p>Seleccione una operacion.</p>
                     <p>
-                        <a href="crearLote.php" class="btn primary">Generar Lote</a>
-                        <a href="cargarLote.php" class="btn info">Cargar Archivo Respuesta</a>
+                        <a href="crear.php" class="btn primary">Generar Lote</a>
+                        <a href="cargar.php" class="btn info">Cargar Archivo Respuesta</a>
                     </p>
                 </div>
             </div>

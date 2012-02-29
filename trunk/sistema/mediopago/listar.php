@@ -1,10 +1,11 @@
 <?php
+
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
 $pag = new paginacion();
 $usuario = new usuario();
 $usuario->confirmar_miembro();
-$pag->paginar("select 
+$query = "select 
     medio_pago.* , 
     banco.nombre 'banco', 
     tipo_medio_pago.nombre 'tipo_medio_pago',
@@ -13,7 +14,11 @@ $pag->paginar("select
     left join banco on medio_pago.banco_id = banco.id
     left join tipo_medio_pago on tipo_medio_pago_id = tipo_medio_pago.id
     join cliente on cliente.id = usuario_id
-", 5);
+";
+if (isset($_GET['filtrar'])) {
+    $query.=" where banco.nombre like '%{$_GET['filtrar']}%' or concat(cliente.nombre,' ', cliente.apellido) like '%{$_GET['filtrar']}%'";
+}
+$pag->paginar($query, 5);
 // </editor-fold>
 ?>
 <!DOCTYPE html>
@@ -50,6 +55,14 @@ $pag->paginar("select
                 <div class="row">
                     <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
+                        <div class="pull-right">
+                                <form class="">
+                                    <label>Filtrar</label>
+                                    <div class="input">
+                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar medio de pago" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>" />
+                                    </div>
+                                </form>
+                            </div>
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
@@ -97,7 +110,7 @@ $pag->paginar("select
                 </div>
                 <footer class="footer">
                     <div class="container">
-                        <p>&copy; Aled Multimedia Solutions <?php echo date('Y'); ?> </p>
+                        <p>&copy; Aled Multimedia Solutions <?php echo date('Y  '); ?> </p>
                     </div>
                 </footer>
             </div>

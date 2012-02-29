@@ -4,9 +4,13 @@ require '../../includes/constants.php';
 $pag = new paginacion();
 $usuario = new usuario();
 $usuario->confirmar_miembro();
-$pag->paginar("select producto.*, categoria.nombre categoria from producto 
+$query = "select producto.*, categoria.nombre categoria from producto 
     inner join categoria on producto.categoria_id = categoria.id
-    where empresa_id={$_SESSION['usuario']['empresa_id']}", 5);
+    where empresa_id={$_SESSION['usuario']['empresa_id']}";
+if (isset($_GET['filtrar'])) {
+    $query.= " and producto.nombre like '%{$_GET['filtrar']}%' or categoria.nombre like '%{$_GET['filtrar']}%'";
+}
+$pag->paginar($query, 5);
 // </editor-fold>
 ?>
 <!DOCTYPE html>
@@ -43,6 +47,14 @@ $pag->paginar("select producto.*, categoria.nombre categoria from producto
                 <div class="row">
                     <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
+                            <div class="pull-right">
+                                <form class="">
+                                    <label>Filtrar</label>
+                                    <div class="input">
+                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar producto" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>" />
+                                    </div>
+                                </form>
+                            </div>
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>

@@ -4,7 +4,13 @@ require '../../includes/constants.php';
 $pag = new paginacion();
 $usuario = new usuario();
 $usuario->confirmar_miembro();
-$pag->paginar("select vendedor.*, empresa.nombre empresa from vendedor inner join empresa on vendedor.empresa_id = empresa.id ", 5);
+$query = "select vendedor.*, empresa.nombre empresa 
+    from vendedor inner join empresa on vendedor.empresa_id = empresa.id 
+    where empresa_id = {$_SESSION['usuario']['empresa_id']}";
+if (isset($_GET['filtrar'])) {
+    $query.=" and vendedor.nombre like '%{$_GET['filtrar']}%'";
+}
+$pag->paginar($query, 5);
 
 // </editor-fold>
 ?>
@@ -42,6 +48,14 @@ $pag->paginar("select vendedor.*, empresa.nombre empresa from vendedor inner joi
                 <div class="row">
                     <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
+                        <div class="pull-right">
+                                <form class="">
+                                    <label>Filtrar</label>
+                                    <div class="input">
+                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar usuario" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>" />
+                                    </div>
+                                </form>
+                            </div>
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
