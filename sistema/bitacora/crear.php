@@ -1,14 +1,14 @@
 <?php
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
-$vendedor = new vendedor();
 $usuario = new usuario();
 $usuario->confirmar_miembro();
+$bitacora = new bitacora();
 $resultado = array("suceed" => false);
 if (isset($_POST['submit'])) {
     $data = $_POST;
     unset($data['submit']);
-    $resultado = $vendedor->insertar($data);
+    $resultado = $bitacora->insertar($data);
 }
 // </editor-fold>
 ?>
@@ -39,59 +39,44 @@ if (isset($_POST['submit'])) {
         <div class="container">
             <div class="content">
                 <div class="page-header">
-                    <h1>Crear Vendedor</h1>
+                    <h1>Crear Bitacora</h1>
                 </div>
                 <ul class="breadcrumb">
                     <li><a href="../usuario">Sistema</a><span class="divider">&raquo;</span></li>
-                    <li><a href="listar.php">Vendedor</a><span class="divider">&raquo;</span></li>
+                    <li><a href="listar.php">Bitacora</a><span class="divider">&raquo;</span></li>
                     <li>Crear</li>
                 </ul>
                 <?php if (isset($_POST) && $resultado['suceed'] == true): ?>
                     <div class="alert-message block-message success">
                         <a class="close" href="#">×</a>
-                        <p>Vendedor creado con <strong>&Eacute;xito.</strong></p>
+                        <p>Bitacora creada con <strong>&Eacute;xito.</strong></p>
                         <a class="btn small primary" href="listar.php">Volver al listado.</a>
                         <a class="btn small" href="../usuario">Volver al men&uacute;.</a>
                     </div>
                 <?php else: ?>
+                <?php if(isset($_POST['submit'])&& isset($resultado['suceed']) && !$resultado['suceed']): ?>
+                <div class="alert-message block-message error">
+                        <a class="close" href="#">×</a>
+                        <p>Ha ocurrido un error al registrar la bitacora.</p>
+                        <?php if(DEBUG):?>
+                        <pre><?php var_dump($resultado); ?></pre>
+                        <?php endif; ?>
+                </div>
+                <?php endif; ?>
                     <div class="row">
                         <div class="hide">
                             <h3>Ayuda</h3>
-                            <p>Ingrese los datos para crear un Vendedor</p>
+                            <p>Ingrese los datos para crear una entrada bitacora</p>
                         </div>
-                        <div class="span12">
+                        <div class="span16">
                             <form method="post" action="">
-                                <input type="hidden" name="empresa_id" value="<?php echo $_SESSION['usuario']['empresa_id']; ?>"/>
+                                <input type="hidden" name="usuario_id" value="<?php $_SESSION['usuario']['id']; ?>"/>
                                 <fieldset>
-                                    <legend>Datos del Vendedor</legend>
+                                    <legend>Datos de la bitacora</legend>
                                     <div class="clearfix">
-                                        <label for="nombre">Nombre:<sup>*</sup></label>
+                                        <label for="nombre">Descripcion:<sup>*</sup></label>
                                         <div class="input">
-                                            <input class="required" type="text" name="nombre" id="nombre"/> 
-                                        </div>
-                                    </div>
-                                    <div class="clearfix">
-                                        <label for="rif">Teléfono 1:<sup>*</sup></label>
-                                        <div class="input">
-                                            <input class="required" type="text" name="telefono_1" id="telefono_1"/>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix">
-                                        <label for="rif">Teléfono 2:</label>
-                                        <div class="input">
-                                            <input type="text" name="telefono_2" id="telefono_2"/>
-                                        </div>
-                                    </div>
-                                    <div class="clearfix">
-                                        <label for="numero_cuenta">E-mail:</label>
-                                        <div class="input">
-                                            <input type="text" name="email" id="email" />
-                                        </div>
-                                    </div>
-                                    <div class="clearfix">
-                                        <label for="numero_cuenta">Dirección:</label>
-                                        <div class="input">
-                                            <input type="text" name="direccion" id="direccion" />
+                                            <input class="required" type="text" name="modulo" id="modulo"/> 
                                         </div>
                                     </div>
                                 </fieldset>

@@ -5,12 +5,15 @@ $usuario = new usuario();
 $usuario->confirmar_miembro();
 //require '../../includes/paginacion.php';
 $pag = new paginacion();
-$pag->paginar("select almacen.id, almacen.nombre nombre, count(producto_id) productos
+$query = "select almacen.id, almacen.nombre nombre, count(producto_id) productos
     from almacen 
     left outer join producto_almacen on almacen.id = producto_almacen.almacen_id
-    where empresa_id ={$_SESSION['usuario']['empresa_id']}
-    group by almacen.id", 5);
-echo "empresa".$_SESSION['usuario']['empresa_id'];
+    where empresa_id ={$_SESSION['usuario']['empresa_id']}";
+if (isset($_GET['filtrar'])) {
+    $query .=" and almacen.nombre like '%{$_GET['filtrar']}%'";
+}
+$query.=" group by almacen.id";
+$pag->paginar($query, 5);
 // </editor-fold>
 ?>
 <!DOCTYPE html>
@@ -47,6 +50,14 @@ echo "empresa".$_SESSION['usuario']['empresa_id'];
                 <div class="row">
                     <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
+                            <div class="pull-right">
+                                <form class="">
+                                    <label>Filtrar</label>
+                                    <div class="input">
+                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar almacen" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>" />
+                                    </div>
+                                </form>
+                            </div>
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
@@ -79,7 +90,7 @@ echo "empresa".$_SESSION['usuario']['empresa_id'];
                                 </tfoot>
                             </table>
                         <?php else: ?>
-                        <div class="alert-message">No hay resultados que mostrar</div>
+                            <div class="alert-message">No hay resultados que mostrar</div>
                         <?php endif; ?>
                         <div class="actions">
                             <a href="crear.php" class="btn small primary">Crear almacen</a>

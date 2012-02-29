@@ -2,8 +2,8 @@
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
 $pag = new paginacion();
-//$usuario = new usuario();
-//$usuario->confirmar_miembro();
+$usuario = new usuario();
+$usuario->confirmar_miembro();
 if (isset($_GET['id']))
     $pag->paginar("select cuotas.*, status_recibo.nombre 'status' , recibo.contrato_id
         from cuotas

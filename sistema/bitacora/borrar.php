@@ -1,12 +1,12 @@
 <?php
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
-$contrato = new contrato();
 $usuario = new usuario();
 $usuario->confirmar_miembro();
+$bitacora = new bitacora();
 $resultado = array("suceed" => false);
 if (isset($_GET['id'])) {
-    $resultado = $contrato->borrar($_GET['id']);
+    $resultado = $bitacora->borrar($_GET['id']);
 }
 // </editor-fold>
 ?>
@@ -17,6 +17,7 @@ if (isset($_GET['id'])) {
         <title><?php echo TITULO; ?></title>
         <meta name="description" content="">
         <meta name="author" content="">
+
         <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
         <!--[if lt IE 9]>
           <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -24,18 +25,19 @@ if (isset($_GET['id'])) {
 
         <!-- Le styles -->
         <link href="<?php echo ROOT; ?>/css/bootstrap.min.css" rel="stylesheet"/>
+        <link href="<?php echo ROOT; ?>/css/style.css" rel="stylesheet"/>
     </head>
     <body>
         <?php include TEMPLATE . 'topbar.php'; ?>
-        <div class="container-fluid">
-            <?php include TEMPLATE . 'sidebar.php'; ?>
+        <div class="container">
             <div class="content">
                 <div class="page-header">
-                    <h1>Borrar Contrato</h1>
+                    <h1>Borrar bitacora</h1>
                 </div>
                 <ul class="breadcrumb">
                     <li><a href="../usuario">Sistema</a><span class="divider">&raquo;</span></li>
-                    <li>Contrato</li>
+                    <li><a href="listar.php">Bitacora</a><span class="divider">&raquo;</span></li>
+                    <li>Borrar</li>
                 </ul>
                 <?php if ($resultado['suceed'] == true): ?>
                     <div class="alert-message block-message success">
@@ -47,9 +49,9 @@ if (isset($_GET['id'])) {
                 <?php else: ?>
                     <div class="alert-message block-message error">
                         <a class="close" href="#">×</a>
-                        <p>No se pudo borrar el Registro, intente de nuevo o contacte con el administrador del sistema.</p>
-                        <a class="btn small info">Intentar de nuevo.</a>
-                        <a class="btn small" href="../sistema">Volver al men&uacute;.</a>
+                        <p><?php echo $resultado['error']; ?></p>
+                        <a class="btn small info" href="javascript:"window.location.reload();">Intentar de nuevo.</a>
+                        <a class="btn small" href="../usuario">Volver al men&uacute;.</a>
                     </div>
 
                 </div>

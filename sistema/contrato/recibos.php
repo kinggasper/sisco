@@ -1,6 +1,7 @@
 <?php
 include '../../includes/constants.php';
-
+$usuario = new usuario();
+$usuario->confirmar_miembro();
 if (isset($_GET['id'])) {
     $recibo = new recibo();
     $recibos = $recibo->recibos_por_contrato($_GET['id']);

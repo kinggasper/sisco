@@ -4,7 +4,7 @@ require '../../includes/constants.php';
 $pag = new paginacion();
 $usuario = new usuario();
 $usuario->confirmar_miembro();
-$pag->paginar("
+$query = "
 select 
     lote.id, fecha_generacion, 
     tipo_lote.nombre 'tipo_lote',
@@ -14,9 +14,12 @@ select
         inner join tipo_lote on lote.tipo_lote_id = tipo_lote.id
         inner join usuario on usuario.id = lote.usuario_id
         inner join lote_detalle on lote_detalle.lote_id = lote.id
-            where empresa_id={$_SESSION['usuario']['empresa_id']}
-                group by lote.id
-    ", 5);
+            where empresa_id={$_SESSION['usuario']['empresa_id']}";
+if (isset($_GET['filtrar'])) {
+    $query.=" and usuario.nombre like '%{$_GET['filtrar']}%' or date_format(fecha_generacion,'%d/%m/%Y') ='{$_GET['filtrar']}'";
+}
+$query.=" group by lote.id";
+$pag->paginar($query, 5);
 // </editor-fold>
 ?>
 <!DOCTYPE html>
@@ -53,6 +56,14 @@ select
                 <div class="row">
                     <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
+                            <div class="pull-right">
+                                <form class="">
+                                    <label>Filtrar</label>
+                                    <div class="input">
+                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar lote" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>" />
+                                    </div>
+                                </form>
+                            </div>
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>

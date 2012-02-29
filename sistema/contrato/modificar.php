@@ -5,7 +5,8 @@ $contrato = new contrato();
 $empresa = new empresa();
 $organismo = new organismo();
 $cliente = new cliente();
-
+$usuario = new usuario();
+$usuario->confirmar_miembro();
 $resultado = array("suceed" => false);
 $empresas = $empresa->listar();
 $organismos = $organismo->listar();

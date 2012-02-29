@@ -4,7 +4,11 @@ require '../../includes/constants.php';
 $usuario = new usuario();
 $usuario->confirmar_miembro();
 $pag = new paginacion();
-$pag->paginar("select * from empresa", 5);
+$query = "select * from empresa ";
+if (isset($_GET['filtrar'])) {
+    $query.=" where empresa.nombre like '%{$_GET['filtrar']}%'";
+}
+$pag->paginar($query, 5);
 // </editor-fold>
 ?>
 <!DOCTYPE html>
@@ -39,8 +43,16 @@ $pag->paginar("select * from empresa", 5);
                     <li>Listar</li>
                 </ul>
                 <div class="row">
-                    <div class="span12">
+                    <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
+                            <div class="pull-right">
+                                <form class="">
+                                    <label>Filtrar</label>
+                                    <div class="input">
+                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar empresa" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>" />
+                                    </div>
+                                </form>
+                            </div>
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>

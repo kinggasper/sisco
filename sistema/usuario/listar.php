@@ -4,8 +4,14 @@ require '../../includes/constants.php';
 $usuario = new usuario();
 $usuario->confirmar_miembro();
 $pag = new paginacion();
-$pag->paginar("select usuario.*, tipo_usuario.nombre tipo_usuario from usuario
-inner join tipo_usuario on usuario.tipo_usuario_id = tipo_usuario.id", 5);
+$query = "select usuario.*, tipo_usuario.nombre tipo_usuario from usuario
+inner join usuario_empresa_rol on usuario.id = usuario_empresa_rol.usuario_id
+inner join tipo_usuario on tipo_usuario_id = tipo_usuario.id
+ where usuario_empresa_rol.empresa_id = {$_SESSION['usuario']['empresa_id']}";
+if (isset($_GET['filtrar'])) {
+    $query.=" and usuario.nombre like '%{$_GET['filtrar']}%'";
+}
+$pag->paginar($query, 5);
 // </editor-fold>
 ?>
 <!DOCTYPE html>
@@ -40,8 +46,16 @@ inner join tipo_usuario on usuario.tipo_usuario_id = tipo_usuario.id", 5);
                     <li>LListar</li>
                 </ul>
                 <div class="row">
-                    <div class="span12">
+                    <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
+                            <div class="pull-right">
+                                <form class="">
+                                    <label>Filtrar</label>
+                                    <div class="input">
+                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar usuario" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>" />
+                                    </div>
+                                </form>
+                            </div>
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>

@@ -12,6 +12,7 @@ class contrato extends db implements crud {
         return $this->update(self::tabla, $data, array("id" => $id));
     }
     public function borrar($id) {
+        //TODO validar que el contrato no tenga recibos cobrados
         return $this->delete(self::tabla, array("id" => $id));
     }
     public function insertar($data) {

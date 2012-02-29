@@ -1,11 +1,10 @@
 <?php
-
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
 $usuario = new usuario();
 $usuario->confirmar_miembro();
 $pag = new paginacion();
-$pag->paginar("SELECT c.*,
+$query = "SELECT c.*,
         status_contrato.nombre 'status_contrato',
         organismo.nombre 'organismo',
         concat(cliente.Nombre, ' ', cliente.Apellido) cliente,
@@ -17,11 +16,16 @@ $pag->paginar("SELECT c.*,
     inner join cliente on c.cliente_id = cliente.id
     inner join vendedor on c.vendedor_id = vendedor.id
     inner join frecuencia on frecuencia.id = c.frecuencia_id
-    where c.empresa_id = {$_SESSION['usuario']['empresa_id']}", 5);
+    where c.empresa_id = {$_SESSION['usuario']['empresa_id']}";
+if (isset($_GET['filtrar'])) {
+    $query.=" and (organismo.nombre like '%{$_GET['filtrar']}%' 
+        or concat(cliente.Nombre, ' ', cliente.Apellido) like '%{$_GET['filtrar']}%' 
+        or vendedor.nombre like '%{$_GET['filtrar']}%')";
+}
+$pag->paginar($query, 5);
 
 
 // </editor-fold>
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -55,6 +59,14 @@ $pag->paginar("SELECT c.*,
                 <div class="row">
                     <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
+                            <div class="pull-right">
+                                <form class="">
+                                    <label>Filtrar</label>
+                                    <div class="input">
+                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar contrato" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>" />
+                                    </div>
+                                </form>
+                            </div>
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
@@ -65,7 +77,7 @@ $pag->paginar("SELECT c.*,
                                         <th>Fecha</th>
                                         <th>Monto</th>
                                         <th>Vendedor</th>
-                                        <th>Comosion Vendedor</th>
+                                        <th>Comision Vendedor</th>
                                         <th>Frecuencia</th>
                                         <th>Estatus</th>
                                         <th>Operaciones</th>
@@ -100,7 +112,10 @@ $pag->paginar("SELECT c.*,
                                 </tfoot>
                             </table>
                         <?php else: ?>
-                            <div class="alert-message">No hay resultados que mostrar</div>
+                            <div class="alert-message">
+                                <a href="listar.php" class="close">x</a>
+                                No hay resultados que mostrar
+                            </div>
                         <?php endif; ?>
                         <div class="actions">
                             <a href="crear.php" class="btn small primary">Crear Contrato</a>

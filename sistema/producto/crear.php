@@ -6,7 +6,6 @@ $empresa = new Empresa();
 $usuario = new usuario();
 $categoria = new categoria();
 $usuario->confirmar_miembro();
-$empresas = $empresa->listar();
 $categorias = $categoria->listar();
 $resultado = array("suceed" => false);
 if (isset($_POST['submit'])) {

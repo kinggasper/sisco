@@ -2,6 +2,8 @@
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
 $recibo = new recibo();
+$usuario = new usuario();
+$usuario->confirmar_miembro();
 $mediopago = new mediopago();
 if (isset($_GET['id'])) {
     $reciboTemp = $recibo->ver($_GET['id']);
