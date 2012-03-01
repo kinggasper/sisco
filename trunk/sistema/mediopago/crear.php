@@ -1,4 +1,4 @@
-<?php
+ok<?php
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
 $mediopago = new mediopago();
