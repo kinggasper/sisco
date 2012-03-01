@@ -9,13 +9,14 @@ $vendedor = new vendedor();
 $organismo = new organismo();
 $frecuencia = new frecuencia();
 $producto = new producto();
+$plazo = new plazo();
 
 //$clientes = $cliente->listar();
 $vendedores = $vendedor->vendedor_por_empresa($_SESSION['usuario']['empresa_id']);
 $organismos = $organismo->listar();
 $frecuencias = $frecuencia->listar();
 $productos = $producto->productosConExistencia();
-
+$plazos = $plazo->listar();
 $resultado = array("suceed" => false);
 if (isset($_POST['submit'])) {
     $data = $_POST;
@@ -25,13 +26,10 @@ if (isset($_POST['submit'])) {
     unset($data['valor']);
     unset($data['sel_producto']);
     unset($data['sel_cantidad']);
-    //$detalle = Array($_POST['producto'],$_POST['cantidad']);
     unset($data['producto']);
     unset($data['cantidad']);
 
-    $resultado = $contrato->emitirContrato($data, $_POST['producto'], $_POST['cantidad']);
-    var_dump($resultado);
-    die("fin");
+    $resultado = $contrato->emitirContrato($data, $_POST['producto'], $_POST['cantidad'],$_POST['costo']);
     //$resultado = $contrato->emitirContrato($contrato,$detalle);
 }
 // </editor-fold>
@@ -74,7 +72,7 @@ if (isset($_POST['submit'])) {
                 $("#tabs").tabs();
                 $("#agregar").click(function(){
                     input_hidden = $("<input/>",{type:'hidden',name:'producto[]',value:$("#sel_producto").val()});
-                    tdNombre = $("<td/>",{html:'<span>'+$("#producto option:selected").text()+'</span>'}).append(input_hidden);
+                    tdNombre = $("<td/>",{html:'<span>'+$("#sel_producto option:selected").text()+'</span>'}).append(input_hidden);
                     input_cantidad = $("<input/>",{"class":"mini",type:"text",readOnly:true,name:"cantidad[]",value:$("#cantidad").val()});
                     tdCantidad = $("<td/>").append(input_cantidad);
                     input_costo = $("<input/>",{"class":"mini",type:"text",readOnly:true,name:"costo[]",value:$("#costo").val()});
@@ -85,6 +83,7 @@ if (isset($_POST['submit'])) {
                     $("#productos tbody").append(tr);
                     $("#sel_producto option:selected").remove();
                     $("#numero_productos").html($("#productos tbody tr").length);
+                    
                 });
                 $("#sel_producto").change(function() {
                     
@@ -137,11 +136,9 @@ if (isset($_POST['submit'])) {
                             <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                                 <input type="hidden" value="<?php echo $_SESSION['usuario']['empresa_id']; ?>" name="empresa_id" />
                                 <input type="hidden" value="1" name="status_contrato_id" />
-                                <input type="hidden" value="50" name="comision_vendedor" />
-                                <input type="hidden" value="1" name="plazo_id" />
-                                <input type="hidden" value="50" name="porcentaje_vendedor"/>
-                                <input type="hidden" value="1000" name="monto"/>
-                                <input type="hidden" value="12" name="iva"/>
+                                <input type="hidden" value="0" name="comision_vendedor" />
+                                <input type="hidden" value="0" name="monto"/>
+                                <input type="hidden" value="0" name="iva"/>
                                 <div id="tabs">
                                     <ul>
                                         <li><a href="#fragment-1"><span>Datos Generales</span></a></li>
@@ -161,6 +158,16 @@ if (isset($_POST['submit'])) {
                                                 <div class="input">
                                                     <select name="frecuencia_id" id="frecuencia_id" class="required">
                                                         <?php foreach ($frecuencias['data'] as $valor): ?>
+                                                            <option value="<?php echo $valor['id']; ?>"><?php echo $valor['nombre'] ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix">
+                                                <label for="Plazo">Plazo (meses):<sup>*</sup></label>
+                                                <div class="input">
+                                                    <select name="plazo_id" id="plazo_id" class="required small">
+                                                        <?php foreach ($plazos['data'] as $valor): ?>
                                                             <option value="<?php echo $valor['id']; ?>"><?php echo $valor['nombre'] ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
@@ -199,7 +206,9 @@ if (isset($_POST['submit'])) {
                                                             <option value="<?php echo $valor['id']; ?>"><?php echo $valor['Nombre'] ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
+                                                    <input type="hidden" value="<?php echo $vendedores['data'][0]['comision'] ?>" name="porcentaje_vendedor"/>
                                                 </div>
+                                                
                                             </div>
                                         </fieldset>
                                     </div>
