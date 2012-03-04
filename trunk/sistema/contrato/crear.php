@@ -71,19 +71,24 @@ if (isset($_POST['submit'])) {
                 });
                 $("#tabs").tabs();
                 $("#agregar").click(function(){
-                    input_hidden = $("<input/>",{type:'hidden',name:'producto[]',value:$("#sel_producto").val()});
-                    tdNombre = $("<td/>",{html:'<span>'+$("#sel_producto option:selected").text()+'</span>'}).append(input_hidden);
-                    input_cantidad = $("<input/>",{"class":"mini",type:"text",readOnly:true,name:"cantidad[]",value:$("#cantidad").val()});
-                    tdCantidad = $("<td/>").append(input_cantidad);
-                    input_costo = $("<input/>",{"class":"mini",type:"text",readOnly:true,name:"costo[]",value:$("#costo").val()});
-                    tdCosto = $("<td/>").append(input_costo);
-                    tdOperaciones = $("<td/>",{html:'<a href="#" class="btn danger small">Eliminar</a>'});
-                    tr = $("<tr/>");
-                    tr.append(tdNombre).append(tdCantidad).append(tdCosto).append(tdOperaciones);
-                    $("#productos tbody").append(tr);
-                    $("#sel_producto option:selected").remove();
-                    $("#numero_productos").html($("#productos tbody tr").length);
-                    
+                    if ($("#cantidad").val() > $("#disponible").val()) {
+                        
+                        alert("Introdujo una cantidad mayor a la disponibilidad de este produto.");
+                        
+                    } else {
+                        input_hidden = $("<input/>",{type:'hidden',name:'producto[]',value:$("#sel_producto").val()});
+                        tdNombre = $("<td/>",{html:'<span>'+$("#sel_producto option:selected").text()+'</span>'}).append(input_hidden);
+                        input_cantidad = $("<input/>",{"class":"mini",type:"text",readOnly:true,name:"cantidad[]",value:$("#cantidad").val()});
+                        tdCantidad = $("<td/>").append(input_cantidad);
+                        input_costo = $("<input/>",{"class":"mini",type:"text",readOnly:true,name:"costo[]",value:$("#costo").val()});
+                        tdCosto = $("<td/>").append(input_costo);
+                        tdOperaciones = $("<td/>",{html:'<a href="#" class="btn danger small">Eliminar</a>'});
+                        tr = $("<tr/>");
+                        tr.append(tdNombre).append(tdCantidad).append(tdCosto).append(tdOperaciones);
+                        $("#productos tbody").append(tr);
+                        $("#sel_producto option:selected").remove();
+                        $("#numero_productos").html($("#productos tbody tr").length);
+                    }
                 });
                 $("#sel_producto").change(function() {
                     
@@ -97,12 +102,16 @@ if (isset($_POST['submit'])) {
                             $("#costo").attr("value",data.data[0].precio_venta);
                         }
                     });
-                    /*$.get("productosDisponibles.php",{id: this.value},
-                    function(data) {
-                        var producto = data.split("|");
-                        $("#disponible").attr("value",producto[0]);
-                        $("#costo").attr("value",producto[1])
-                    });*/
+                });
+                $(document).on("click",".danger",function(){
+                    if(confirm("Realmente desea borrar este registro?"))
+                    {
+                        opcion = $("<option/>",{value:$(this).parents("tr:eq(0)").find("input[type='text']").val()}).html($(this).parents("tr:eq(0)").find("span").html());
+                        console.dir(opcion);
+                        $("#sel_producto").append(opcion);
+                        $(this).closest("tr").remove();
+                        $("#productos tfoot span:eq(1)").html($("#productos tbody tr").length);
+                    }
                 });
 
             });

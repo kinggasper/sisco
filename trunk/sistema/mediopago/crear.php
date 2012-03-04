@@ -1,4 +1,4 @@
-ok<?php
+<?php
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
 $mediopago = new mediopago();
@@ -54,6 +54,7 @@ if (isset($_POST['submit'])) {
                         required:"Debe agregar un numero de cuenta para este tipo de medio de pago"
                     }
                 });
+                
             });
         </script>
     </head>

@@ -12,9 +12,36 @@ class contrato extends db implements crud {
         return $this->update(self::tabla, $data, array("id" => $id));
     }
     public function borrar($id) {
-        //TODO validar que el contrato no tenga recibos cobrados
-        return $this->delete(self::tabla, array("id" => $id));
+        $resultado = array("suceed" => false);
+        if (!$this->contratoRecibosPagados($id)) {
+            try {
+
+                $this->exec_query("start transaction");
+                $this->exec_query("delete from recibo where contrato_id=".$id);
+                $this->exec_query("delete from contrato_productos where contrato_id=".$id);
+                $resultado= $this->delete(self::tabla, array("id" => $id));
+                $this->exec_query("commit");
+                return $resultado;
+            } catch (Exception $exc) {
+                $this->exec_query("rollback");
+                trigger_error("Error al eliminar el contrato" . $exc->getTraceAsString());
+
+            }
+        } else {
+            return Array("suceed"=>false,"error"=>"Contrato tiene recibos pagados.");
+        }
     }
+    
+    public function contratoRecibosPagados($contrato) {
+        $recibos = new recibo();
+        $resultado = $recibos->recibos_pagados_por_contrato($contrato);
+        if ($resultado['suceed']){
+            return count($resultado['data'])>0;
+        } else {
+            return false;
+        }
+    }
+    
     public function insertar($data) {
         return $this->insert(self::tabla, $data);
         
@@ -56,7 +83,7 @@ class contrato extends db implements crud {
                 
                 // registramos ahora los recibos
                 $plazos = new plazo();
-                $plazo = $plazos->ver($data['frecuencia_id']);
+                $plazo = $plazos->ver($data['plazo_id']);
             
                 $res = $this->generarRecibos($data['cliente_id'], $contrato_id, $data['frecuencia_id'], $plazo['data'][0]['nombre']);
                 $monto_recibo = $monto / $res;

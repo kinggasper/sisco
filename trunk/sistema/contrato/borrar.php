@@ -7,6 +7,7 @@ $usuario->confirmar_miembro();
 $resultado = array("suceed" => false);
 if (isset($_GET['id'])) {
     $resultado = $contrato->borrar($_GET['id']);
+    
 }
 // </editor-fold>
 ?>
@@ -27,8 +28,7 @@ if (isset($_GET['id'])) {
     </head>
     <body>
         <?php include TEMPLATE . 'topbar.php'; ?>
-        <div class="container-fluid">
-            <?php include TEMPLATE . 'sidebar.php'; ?>
+        <div class="container">
             <div class="content">
                 <div class="page-header">
                     <h1>Borrar Contrato</h1>
@@ -48,8 +48,9 @@ if (isset($_GET['id'])) {
                     <div class="alert-message block-message error">
                         <a class="close" href="#">×</a>
                         <p>No se pudo borrar el Registro, intente de nuevo o contacte con el administrador del sistema.</p>
-                        <a class="btn small info">Intentar de nuevo.</a>
-                        <a class="btn small" href="../sistema">Volver al men&uacute;.</a>
+                        <p><strong><?php echo $resultado['error']; ?></strong></p>
+                        <a class="btn small info" href="borrar.php?id=<?php echo $_GET['id']; ?>">Intentar de nuevo.</a>
+                        <a class="btn small" href="../usuario">Volver al men&uacute;.</a>
                     </div>
 
                 </div>
