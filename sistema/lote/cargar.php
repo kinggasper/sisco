@@ -129,7 +129,8 @@ $tipos_medio_pago = $mediopago->listar_tipo_medio_pagos();
                             </fieldset>
                             <fieldset>
                                 <div class="actions">
-                                    <input type="submit" class="btn primary" name="enviar" value="Generar"/>
+                                    <input type="submit" class="btn primary" name="enviar" value="Procesar"/>
+                                    <a href="listar.php" class="btn">Volver al menú</a>
                                 </div>
                             </fieldset>
                         </form>

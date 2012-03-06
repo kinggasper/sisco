@@ -1,5 +1,5 @@
 <?php
-include_once '../../includes/constants.php';
+include '../../includes/constants.php';
 $usuario = new usuario();
 $usuario->confirmar_miembro();
 ?>
@@ -19,15 +19,13 @@ $usuario->confirmar_miembro();
                     <h1>SISCO<small> Sistema Integrado de Cobranzas Online</small></h1>
                 </div>
                 <ul class="breadcrumb">
-                    <li>Sistema</li>
+                    <li><a href="../usuario/">Sistema</a><span class="divider">&raquo;</span></li>
+                    <li><a href="listar.php">Reporte</a><span class="divider">&raquo;</span></li>
+                    <li>Listar</li>
                 </ul>
                 <div class="hero-unit">
-                    <h1><?php echo $_SESSION['usuario']['Nombre']; ?> 
-                        <small><?php echo $_SESSION['usuario']['empresa']; ?> - <?php echo $_SESSION['usuario']['tipo_usuario']; ?>.</small> </h1>
-                    <p>
-                        <a href="modificar.php" class="btn primary">Modificar Datos</a>
-                        <a href="<?php echo $_SERVER['PHP_SELF'] . "?logout=1"; ?>" class="btn danger">Cerrar Sesión</a>
-                    </p>
+                    <h1>Módulo de Reportes
+                        <small> En construcción</small></h1>
                 </div>
                 <h2>M&oacute;dulos disponibles</h2>
                 <div class="row">
@@ -73,7 +71,6 @@ $usuario->confirmar_miembro();
                         <p>Administrar Vendedores disponibles</p>
                         <a class="btn info small" href="../vendedor/listar.php">Entrar</a>
                     </div>
-                    
                 </div>
                 <div class="row">
                     <div class="span4">
@@ -94,7 +91,7 @@ $usuario->confirmar_miembro();
                 </div>
             </div>
             <footer>
-                <p>&copy; Aled Multimedia Solutions 2011</p>
+                <p>&copy; Aled Multimedia Solutions <?php echo date('Y'); ?></p>
             </footer>
         </div>
     </body>
