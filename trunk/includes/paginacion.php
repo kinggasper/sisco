@@ -41,6 +41,12 @@ class paginacion extends Misc {
             }
             $this->startRow = $this->pageNum * $this->maxRows;
 
+            if (isset($_GET['order']) && isset($_GET['dir'])) {
+                $this->query.=" order by {$_GET['order']} {$_GET['dir']}";
+            } else {
+                $this->query .=" order by 1 desc";
+            }
+
             $this->limit = sprintf("%s LIMIT %d, %d", $this->query, $this->startRow, $this->maxRows);
 
             $this->registros_limit = $this->db->dame_query($this->limit);

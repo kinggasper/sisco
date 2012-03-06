@@ -59,7 +59,7 @@ if (isset($_GET['id'])) {
                                             <td><?php echo misc::date_format($registro['fecha']); ?></td>
                                             <td><?php echo misc::number_format($registro['monto']); ?> Bsf.</td>
                                             <td><?php echo $registro['status_recibo']; ?></td>
-                                            <td><?php echo $registro['tipo_medio_pago']; ?></td>
+                                            <td><?php echo $registro['tipo_medio_pago']." ".$registro['banco']; ?></td>
                                             <td>
                                                 <a href="../mediopago/recibo.php?id=<?php echo $registro['id']; ?>" class="btn small info" title="Modificar Medio de Pago">Modificar</a>
                                                 <?php if ($registro['status_recibo'] == 'Rechazado'): ?>

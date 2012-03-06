@@ -56,8 +56,8 @@ $pag->paginar($query, 5);
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>Nombre</th>
+                                        <th><a href="<?php echo misc::url_sortable(); ?>">id</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("nombre"); ?>">Nombre</a></th>
                                         <th>Operaciones</th>
                                     </tr>
                                 </thead>

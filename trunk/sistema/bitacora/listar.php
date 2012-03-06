@@ -60,9 +60,9 @@ $pag->paginar($query, 5);
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
-                                        <th>fecha</th>
-                                        <th>usuario</th>
-                                        <th>modulo</th>
+                                        <th><a href="<?php echo misc::url_sortable("fecha"); ?>">fecha</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("usuario"); ?>">usuario</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("modulo"); ?>">modulo</a></th>
                                         <th>Operaciones</th>
                                     </tr>
                                 </thead>

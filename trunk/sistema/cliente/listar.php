@@ -58,11 +58,11 @@ $pag->paginar($query, 5);
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>Nombre</th>
-                                        <th>Organismo</th>
-                                        <th>Departamento</th>
-                                        <th>Cargo</th>
+                                        <th><a href="<?php echo misc::url_sortable(); ?>">id</a></th>
+                                        <th><a href="<?php echo misc::url_sortable(); ?>">Nombre</a></th>
+                                        <th><a href="<?php echo misc::url_sortable(); ?>">Organismo</a></th>
+                                        <th><a href="<?php echo misc::url_sortable(); ?>">Departamento</a></th>
+                                        <th><a href="<?php echo misc::url_sortable(); ?>">Cargo</a></th>
                                         <th>Operaciones</th>
                                     </tr>
                                 </thead>
