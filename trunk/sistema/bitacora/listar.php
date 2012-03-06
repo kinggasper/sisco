@@ -39,11 +39,11 @@ $pag->paginar($query, 5);
         <div class="container">
             <div class="content">
                 <div class="page-header">
-                    <h1>Listar almacenes <small> almacenes disponibles</small> </h1>
+                    <h1>Listar Bitácora <small> Bitácora del sistema</small> </h1>
                 </div>
                 <ul class="breadcrumb">
                     <li><a href="../usuario">Sistema</a><span class="divider">&raquo;</span></li>
-                    <li><a href="listar.php">Almacen</a><span class="divider">&raquo;</span></li>
+                    <li><a href="listar.php">Bitácora</a><span class="divider">&raquo;</span></li>
                     <li>Listar</li>
                 </ul>
                 <div class="row">
@@ -53,7 +53,7 @@ $pag->paginar($query, 5);
                                 <form class="">
                                     <label>Filtrar</label>
                                     <div class="input">
-                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar Bitacora" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>"/>
+                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar Bitácora" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>"/>
                                     </div>
                                 </form>
                             </div>
@@ -91,15 +91,12 @@ $pag->paginar($query, 5);
                             <div class="alert-message">No hay resultados que mostrar</div>
                         <?php endif; ?>
                         <div class="actions">
-                            <a href="crear.php" class="btn small primary">Crear almacen</a>
-                            <a href="ordenDeCompra.php" class="btn small">Orden de compra</a>
-                            <a href="productos_faltantes.php" class="btn small">Productos Faltantes</a>
                             <a href="../usuario" class="btn small ">Volver al menu</a>
                         </div>
                     </div>
                     <div class="hide">
                         <h3>Ayuda</h3>
-                        <p>Listado de almacenes que emiten contratos</p>
+                        <p>Listado de Bitácora que emiten contratos</p>
                     </div>
                 </div>
                 <footer class="footer">
