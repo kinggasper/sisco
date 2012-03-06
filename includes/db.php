@@ -1,4 +1,5 @@
 <?php
+
 include_once 'constants.php';
 
 /**
@@ -13,26 +14,31 @@ Class db {
      * @var string Host
      */
     private $host = HOST;
+
     /**
      * nombre de usuario
      * @var string usuario
      */
     private $user = USER;
+
     /**
      * contraseña de acceso
      * @var string contraseña
      */
     private $password = PASSWORD;
+
     /**
      * Tabla
      * @var string tabla
      */
     private $db = DB;
+
     /**
      * mysqli instance
      * @var msqli sql
      */
     protected $mysqli = null;
+
     /**
      * Debug indica si está en modo debug y muestra en un campo las consultas realizadas;
      */
@@ -126,7 +132,7 @@ Class db {
      * @param array $groupby una cadena o un arreglo con los campos a agrupar
      * @return array el arreglo asociativo con los resultados de la consulta
      */
-    public function select($columnas=null, $tablas=null, $condicion=null, $join=null, $order=null, $groupby=null) {
+    public function select($columnas = null, $tablas = null, $condicion = null, $join = null, $order = null, $groupby = null) {
         try {
             $r = array();
             if ($columnas != null && $tablas != null) {
@@ -211,7 +217,7 @@ Class db {
      * @param array $datos los datos en una matriz asociativa con las columnas y valores
      * @return bool true si la operación fue efectiva, false si hubo algún fallo.
      */
-    public function insert($tabla=null, $datos=null) {
+    public function insert($tabla = null, $datos = null) {
         try {
             if ($tabla != null && $datos != null) {
                 $columnas = array_keys($datos);
@@ -265,7 +271,7 @@ Class db {
      * @param array $condicion matriz asociativa con las condiciones y valores
      * @return bool true si es exitoso, false en caso de error
      */
-    public function update($tabla=null, $datos=null, $condicion=null) {
+    public function update($tabla = null, $datos = null, $condicion = null) {
         try {
             if ($tabla != null && $datos != null) {
                 $columnas = array_keys($datos);
@@ -321,7 +327,7 @@ Class db {
      * @param array matriz asociativa con las codiciones y valores
      * @return bool true si la operación fue exitosa, false en caso contrario
      */
-    public function delete($tabla=null, $condicion=null) {
+    public function delete($tabla = null, $condicion = null) {
         try {
             if ($tabla != null && $condicion != null) {
                 $query = 'delete from ';
@@ -385,12 +391,13 @@ Class db {
  * @author Anyul Rivas
  */
 Class Misc {
+
     /**
      * Carga automatica de archivos de clases
      */
-    public function __autoload($clase){
-        $filename = SERVER_ROOT."/includes/".$clase.".php";
-        if(file_exists($filename)){
+    public function __autoload($clase) {
+        $filename = SERVER_ROOT . "/includes/" . $clase . ".php";
+        if (file_exists($filename)) {
             include $filename;
         }
     }
@@ -466,14 +473,14 @@ Class Misc {
             $html.="<hr/>";
             $html.= "<pre><b>Petición POST</b></pre><code>" . misc::dump($_POST, 1) . "</code>";
         }
-		if (isset($_FILES) && sizeof($_FILES) > 0) {
+        if (isset($_FILES) && sizeof($_FILES) > 0) {
             $html.="<hr/>";
             $html.= "<pre><b>Archivos Cargados</b></pre><code>" . misc::dump($_FILES, 1) . "</code>";
-		}
-		if (isset($_SESSION) && sizeof($_SESSION) > 0) {
+        }
+        if (isset($_SESSION) && sizeof($_SESSION) > 0) {
             $html.="<hr/>";
             $html.= "<pre><b>Variables de Sesión</b></pre><code>" . misc::dump($_SESSION, 1) . "</code>";
-		}
+        }
 
         $html.="<hr/>";
         $html.= "<pre><b>Server:</b></pre><code>" . misc::dump($_SERVER) . "</code>";
@@ -590,6 +597,11 @@ Class Misc {
         }
     }
 
+    /**
+     * var_dump reeplacement. better for sending emails
+     * @param mixed $args
+     * @return string 
+     */
     public static function dump($args) {
         $salida = null;
         $parametros = func_get_args();
@@ -617,25 +629,70 @@ Class Misc {
         }
         return $salida;
     }
-/**
- * genera una cadena formateada para insertar en url de previsualizacion de carros
- * @param type $marca La marca
- * @param type $modelo El modelo
- * @param type $anio el año
- * @return string la cadena formateada
- */
 
-    public static function number_format($numero){
+    /**
+     * genera una cadena formateada para insertar en url de previsualizacion de carros
+     * @param type $marca La marca
+     * @param type $modelo El modelo
+     * @param type $anio el año
+     * @return string la cadena formateada
+     */
+    public static function number_format($numero) {
         return number_format($numero, 2, ',', '.');
     }
-    public static function date_format($fecha){
-        return date('d/m/Y',  strtotime($fecha));
+
+    /**
+     * formatea una fecha en formato legible
+     * @param String $fecha fecha a formatear
+     * @return String 
+     */
+    public static function date_format($fecha) {
+        return date('d/m/Y', strtotime($fecha));
     }
-    public static function phone_format($phone){
-        return substr($phone, 0, 4)."-".substr($phone, 4, 3).".".substr($phone, 7, 2).".".substr($phone, 9, 2);
+
+    /**
+     * devuelve un numero en formato telefonico
+     * @param String $phone telefono a formatear
+     * @return String 
+     */
+    public static function phone_format($phone) {
+        return substr($phone, 0, 4) . "-" . substr($phone, 4, 3) . "." . substr($phone, 7, 2) . "." . substr($phone, 9, 2);
     }
-    public static function account_format($number){
-        return substr($number, 0, 4)."-".substr($number, 4, 4)."-".substr($number, 8, 4)."-".substr($number, 12, 4)."-".substr($number, 16, 4);
+
+    /**
+     * formatea una cadena de numeros como una cuenta bancaria
+     * @param String $number el numero de cuenta
+     * @return String 
+     */
+    public static function account_format($number) {
+        return substr($number, 0, 4) . "-" . substr($number, 4, 4) . "-" . substr($number, 8, 4) . "-" . substr($number, 12, 4) . "-" . substr($number, 16, 4);
+    }
+
+    /**
+     * devuelve una url para ordernar los registros bajo un determinado criterio y una direccion
+     * @param String $campo la columna de la base de datos para realizar el ordenamiento
+     * @param String $direccion Direccion de ordenamiento
+     * @return String url ordenada 
+     */
+    public static function url_sortable($campo = "id", $direccion = "desc") {
+        $params = explode("&", $_SERVER['QUERY_STRING']);
+        $newParams = array();
+        if (count($params) > 0) {
+            foreach ($params as $param) {
+                /* si no encuentro el campo ni la direccion en la url */
+                if (stristr($param, "order") === false&&stristr($param, $campo) === false && stristr($param, $direccion) === false) {
+                    array_push($newParams, $param);
+                }
+            }
+            $pagina = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'];
+            if (count($newParams) != 0) {
+                $pagina .= "?" . htmlentities(implode("&", $newParams));
+                $pagina .= "&order=$campo&dir=$direccion";
+            } else {
+                $pagina.= "?order=$campo&dir=$direccion";
+            }
+        }
+        return $pagina;
     }
 
 }
@@ -651,7 +708,7 @@ class GoogleUrlApi {
     var $key = 'AIzaSyDNK-CJQBBisWGj7huMvQSjjmWT8RJkLiA';
 
     // Constructor
-    public function GoogleURLAPI($key= '', $apiURL = 'https://www.googleapis.com/urlshortener/v1/url') {
+    public function GoogleURLAPI($key = '', $apiURL = 'https://www.googleapis.com/urlshortener/v1/url') {
         if ($key == '')
             $key == $this->key;
         $this->apiURL = $apiURL . '?key=' . $key;

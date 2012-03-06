@@ -1,5 +1,4 @@
 <?php
-
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
 $pag = new paginacion();
@@ -55,7 +54,7 @@ $pag->paginar($query, 5);
                 <div class="row">
                     <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
-                        <div class="pull-right">
+                            <div class="pull-right">
                                 <form class="">
                                     <label>Filtrar</label>
                                     <div class="input">
@@ -66,10 +65,10 @@ $pag->paginar($query, 5);
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>Tipo</th>
-                                        <th>N&uacute;mero</th>
-                                        <th>Cliente</th>
+                                        <th><a href="<?php echo misc::url_sortable(); ?>">id</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("tipo_medio_pago"); ?>">Tipo</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("numero_cuenta"); ?>">N&uacute;mero</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("cliente"); ?>">Cliente</a></th>
                                         <th>Operaciones</th>
                                     </tr>
                                 </thead>

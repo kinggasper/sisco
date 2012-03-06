@@ -67,11 +67,11 @@ $pag->paginar($query, 5);
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>Usuario</th>
-                                        <th>fecha</th>
-                                        <th>Tipo Lote</th>
-                                        <th>Recibos</th>
+                                        <th><a href="<?php echo misc::url_sortable(); ?>">id</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("usuario"); ?>">Usuario</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("fecha_generacion"); ?>">fecha</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("tipo_lote"); ?>">Tipo Lote</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("recibos"); ?>">Recibos</a></th>
                                         <th>Operaciones</th>
                                     </tr>
                                 </thead>

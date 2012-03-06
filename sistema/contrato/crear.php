@@ -126,7 +126,8 @@ if (isset($_POST['submit'])) {
                 </div>
                 <ul class="breadcrumb">
                     <li><a href="../usuario">Sistema</a><span class="divider">&raquo;</span></li>
-                    <li>Contrato</li>
+                    <li><a href="listar.php">Contrato</a><span class="divider">&raquo;</span></li>
+                    <li>Crear</li>
                 </ul>
                 <?php if (isset($_POST) && $resultado['suceed'] == true): ?>
                     <div class="alert-message block-message success">

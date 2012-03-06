@@ -29,14 +29,19 @@ class recibo extends db implements crud {
                 where recibo.id=$id");
     }
     public function recibos_por_contrato($contrato){
-        return $this->dame_query("select recibo.*, 
-                status_recibo.nombre 'status_recibo',
-                tipo_medio_pago.nombre 'tipo_medio_pago'
-                from recibo
+        return $this->dame_query("
+                select recibo.*, 
+        status_recibo.nombre 'status_recibo',
+        tipo_medio_pago.nombre 'tipo_medio_pago',
+        banco.nombre 'banco'
+            from recibo
                 inner join status_recibo on recibo.status_recibo_id = status_recibo.id
                 inner join medio_pago on recibo.medio_pago_id = medio_pago.id
                 inner join tipo_medio_pago on medio_pago.tipo_medio_pago_id = tipo_medio_pago.id
-                where contrato_id = $contrato ");
+                left join banco on medio_pago.banco_id = banco.id
+                    where recibo.contrato_id = $contrato 
+                        order by recibo.id
+                ");
     }
     
     public function recibos_pagados_por_contrato($contrato) {

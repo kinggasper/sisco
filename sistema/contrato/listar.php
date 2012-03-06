@@ -54,7 +54,8 @@ $pag->paginar($query, 5);
                 </div>
                 <ul class="breadcrumb">
                     <li><a href="../usuario">Sistema</a><span class="divider">&raquo;</span></li>
-                    <li>Contratos</li>
+                    <li><a href="listar.php">Contratos</a><span class="divider">&raquo;</span></li>
+                    <li>Listar</li>
                 </ul>
                 <div class="row">
                     <div class="span16">
@@ -70,16 +71,16 @@ $pag->paginar($query, 5);
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>Número</th>
-                                        <th>Organismo</th>
-                                        <th>Cliente</th>
-                                        <th>Fecha</th>
-                                        <th>Monto</th>
-                                        <th>Vendedor</th>
-                                        <th>Comision Vendedor</th>
-                                        <th>Frecuencia</th>
-                                        <th>Estatus</th>
+                                        <th><a href="<?php echo Misc::url_sortable(); ?>">id</a></th>
+                                        <th><a href="<?php echo Misc::url_sortable("numero"); ?>">Número</a></th>
+                                        <th><a href="<?php echo Misc::url_sortable("organismo"); ?>">Organismo<a/></th>
+                                        <th><a href="<?php echo Misc::url_sortable("cliente"); ?>">Cliente</a></th>
+                                        <th><a href="<?php echo Misc::url_sortable("fecha"); ?>">Fecha</a></th>
+                                        <th><a href="<?php echo Misc::url_sortable("monto"); ?>">Monto</a></th>
+                                        <th><a href="<?php echo Misc::url_sortable("vendedor"); ?>">Vendedor</a></th>
+                                        <th><a href="<?php echo Misc::url_sortable("comision_vendedor"); ?>">Comision Vendedor</a></th>
+                                        <th><a href="<?php echo Misc::url_sortable("frecuencia"); ?>">Frecuencia</a></th>
+                                        <th><a href="<?php echo Misc::url_sortable("status_contrato"); ?>">Estatus</a></th>
                                         <th>Operaciones</th>
                                     </tr>
                                 </thead>
@@ -97,7 +98,8 @@ $pag->paginar($query, 5);
                                             <td><?php echo $registro['frecuencia']; ?></td>
                                             <td><?php echo $registro['status_contrato']; ?></td>
                                             <td>
-                                                <a href="modificar.php?id=<?php echo $registro['id']; ?>" class="btn small info">Modificar</a>
+                                                <a href="modificar.php?id=<?php echo $registro['id']; ?>" class="btn small">Modificar</a>
+                                                <a href="recibos.php?id=<?php echo $registro['id']; ?>" class="btn small info">Recibos</a>
                                                 <a href="borrar.php?id=<?php echo $registro['id']; ?>" class="btn small danger">Eliminar</a>
                                             </td>
                                         </tr>
