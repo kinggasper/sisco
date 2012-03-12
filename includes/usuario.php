@@ -10,7 +10,15 @@ class usuario extends db implements crud {
     const tabla = "usuario";
 
     public function insertar($data) {
-        return $this->insert(self::tabla, $data);
+        $empresa = $data['empresa_id'];
+        $tipo_usuario = $data['tipo_usuario_id'];
+        unset($data['tipo_usuario_id']);
+        unset($data['empresa_id']);
+        $result = $this->insert(self::tabla, $data);
+        $this->exec_query("insert into usuario_empresa_rol(usuario_id,empresa_id,tipo_usuario_id) values({$result['insert_id']}, {$empresa}, {$tipo_usuario})
+on duplicate key update tipo_usuario_id = {$tipo_usuario};");
+        return $result;
+        
     }
 
     public function actualizar($id, $data) {

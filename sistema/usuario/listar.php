@@ -43,7 +43,7 @@ $pag->paginar($query, 5);
                 <ul class="breadcrumb">
                     <li><a href="../usuario">Sistema</a><span class="divider">&raquo;</span></li>
                     <li><a href="listar.php">Usuario</a><span class="divider">&raquo;</span></li>
-                    <li>LListar</li>
+                    <li>Listar</li>
                 </ul>
                 <div class="row">
                     <div class="span16">
@@ -59,10 +59,10 @@ $pag->paginar($query, 5);
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
-                                        <th>Nombre</th>
-                                        <th>Login</th>
-                                        <th>Rol</th>
+                                        <th><a href="<?php echo misc::url_sortable(); ?>">id</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("nombre"); ?>">Nombre</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("login"); ?>">Login</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("tipo_usuario_id"); ?>">Rol</a></th>
                                         <th>Operaciones</th>
                                     </tr>
                                 </thead>
