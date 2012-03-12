@@ -91,6 +91,11 @@ $usuario->confirmar_miembro();
                         <p>Revisa la bitacora del sistema</p>
                         <a href="../bitacora/listar.php" class="btn small info">Entrar</a>
                     </div>
+                    <div class="span4">
+                        <h2>Banco</h2>
+                        <p>Administraci&oacute;n de Banco</p>
+                        <a href="../banco/listar.php" class="btn small info">Entrar</a>
+                    </div>
                 </div>
             </div>
             <footer>

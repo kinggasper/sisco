@@ -71,7 +71,7 @@ $tipos_medio_pago = $mediopago->listar_tipo_medio_pagos();
                 <?php endif; ?>
                 <div class="row">
                     <div class="span16">
-                        <form method="post">
+                        <form method="post" action="lote.php">
                             <fieldset>
                                 <legend>Crear Lote</legend>
                                 <div class="clearfix">

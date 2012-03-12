@@ -44,7 +44,7 @@ class paginacion extends Misc {
             if (isset($_GET['order']) && isset($_GET['dir'])) {
                 $this->query.=" order by {$_GET['order']} {$_GET['dir']}";
             } else {
-                $this->query .=" order by 1 desc";
+                $this->query .=" order by 1 asc";
             }
 
             $this->limit = sprintf("%s LIMIT %d, %d", $this->query, $this->startRow, $this->maxRows);

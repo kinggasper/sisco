@@ -43,10 +43,10 @@ if (isset($_POST['submit'])) {
         <script type="text/javascript">
             $(document).ready(function(){
                 $("#banco_id").rules('add',{
-                   required: function(){ return ($("#tipo_medio_pago_id").val()==2)},
-                   messages:{
-                       required:"Debe seleccionar un banco para este tipo de medio de pago"
-                   }
+                    required: function(){ return ($("#tipo_medio_pago_id").val()==2)},
+                    messages:{
+                        required:"Debe seleccionar un banco para este tipo de medio de pago"
+                    }
                 });
                 $("#numero_cuenta").rules('add',{
                     required: function(){ return ($("#tipo_medio_pago_id").val()==2)},
@@ -92,7 +92,7 @@ if (isset($_POST['submit'])) {
                             <h3>Ayuda</h3>
                             <p>Ingrese los datos para crear un medio de pago</p>
                         </div>
-                        <div class="span12">
+                        <div class="span16">
                             <form method="post" action="">
                                 <fieldset>
                                     <legend>Datos del Medio de pago</legend>
@@ -110,9 +110,14 @@ if (isset($_POST['submit'])) {
                                         <label for="banco_id">Banco</label>
                                         <div class="input">
                                             <select name="banco_id" id="banco_id">
-                                                <?php foreach ($bancos['data'] as $banco): ?>
-                                                    <option value=" <?php echo $banco['id']; ?>"><?php echo $banco['nombre']; ?></option>
-                                                <?php endforeach; ?>
+                                                <optgroup label="N&oacute;mina">
+                                                <option value="">N&oacute;mina</option>
+                                                </optgroup>
+                                                <optgroup label="Bancos">
+                                                    <?php foreach ($bancos['data'] as $banco): ?>
+                                                        <option value=" <?php echo $banco['id']; ?>"><?php echo $banco['nombre']; ?></option>
+                                                    <?php endforeach; ?>
+                                                </optgroup>
                                             </select>
                                         </div>
                                     </div>
@@ -126,7 +131,7 @@ if (isset($_POST['submit'])) {
                                         <label>Usuario</label>
                                         <div class="input">
                                             <input type="hidden" name="usuario_id" value="<?php echo $usuario_temp['id'] ?>"/>
-                                            <input type="text" name="usuario" value="<?php echo $usuario_temp['Nombre']." ".$usuario_temp['Apellido']; ?>" disabled="true"/>
+                                            <input type="text" name="usuario" value="<?php echo $usuario_temp['Nombre'] . " " . $usuario_temp['Apellido']; ?>" disabled="true"/>
                                         </div>
                                     </div>
                                 </fieldset>
