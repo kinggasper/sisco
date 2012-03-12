@@ -5,7 +5,7 @@ $usuario = new usuario();
 $usuario->confirmar_miembro();
 //require '../../includes/paginacion.php';
 $pag = new paginacion();
-$query = "select * from bitacora
+$query = "select bitacora.*, usuario.Nombre from bitacora
         inner join usuario on usuario.id = bitacora.usuario_id
         inner join usuario_empresa_rol on usuario_empresa_rol.usuario_id = usuario.id
         where empresa_id = {$_SESSION['usuario']['empresa_id']}";
@@ -49,7 +49,7 @@ $pag->paginar($query, 5);
                 <div class="row">
                     <div class="span16">
                         <?php if (count($pag->registros) > 0): ?>
-                        <div class="pull-right">
+                            <div class="pull-right">
                                 <form class="">
                                     <label>Filtrar</label>
                                     <div class="input">
@@ -60,8 +60,9 @@ $pag->paginar($query, 5);
                             <table class="zebra-striped bordered-table">
                                 <thead>
                                     <tr>
+                                        <th><a href="<?php echo misc::url_sortable(); ?>">id</a></th>
                                         <th><a href="<?php echo misc::url_sortable("fecha"); ?>">fecha</a></th>
-                                        <th><a href="<?php echo misc::url_sortable("usuario"); ?>">usuario</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("nombre"); ?>">usuario</a></th>
                                         <th><a href="<?php echo misc::url_sortable("modulo"); ?>">modulo</a></th>
                                         <th>Operaciones</th>
                                     </tr>
@@ -69,6 +70,7 @@ $pag->paginar($query, 5);
                                 <tbody>
                                     <?php foreach ($pag->registros as $registro): ?>
                                         <tr>
+                                            <td><?php echo $registro['id']; ?></td>
                                             <td><?php echo misc::date_format($registro['fecha']); ?></td>
                                             <td><?php echo $registro['Nombre']; ?></td>
                                             <td><?php echo misc::trim_text($registro['modulo'], 100); ?></td>

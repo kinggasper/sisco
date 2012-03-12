@@ -78,9 +78,7 @@ $pag->paginar($query, 5);
                                         <th><a href="<?php echo Misc::url_sortable("fecha"); ?>">Fecha</a></th>
                                         <th><a href="<?php echo Misc::url_sortable("monto"); ?>">Monto</a></th>
                                         <th><a href="<?php echo Misc::url_sortable("vendedor"); ?>">Vendedor</a></th>
-                                        <th><a href="<?php echo Misc::url_sortable("comision_vendedor"); ?>">Comision Vendedor</a></th>
                                         <th><a href="<?php echo Misc::url_sortable("frecuencia"); ?>">Frecuencia</a></th>
-                                        <th><a href="<?php echo Misc::url_sortable("status_contrato"); ?>">Estatus</a></th>
                                         <th>Operaciones</th>
                                     </tr>
                                 </thead>
@@ -94,10 +92,9 @@ $pag->paginar($query, 5);
                                             <td><?php echo misc::date_format($registro['fecha']); ?></td>
                                             <td><?php echo misc::number_format($registro['monto']); ?> Bsf.</td>
                                             <td><?php echo $registro['vendedor']; ?></td>
-                                            <td><?php echo misc::number_format($registro['comision_vendedor']); ?> Bsf.</td>
                                             <td><?php echo $registro['frecuencia']; ?></td>
-                                            <td><?php echo $registro['status_contrato']; ?></td>
-                                            <td>
+                                            <td style="white-space: nowrap">
+                                                <a href="consultar.php?id=<?php echo $registro['id']; ?>" class="btn small primary">Consultar</a>
                                                 <a href="modificar.php?id=<?php echo $registro['id']; ?>" class="btn small">Modificar</a>
                                                 <a href="recibos.php?id=<?php echo $registro['id']; ?>" class="btn small info">Recibos</a>
                                                 <a href="borrar.php?id=<?php echo $registro['id']; ?>" class="btn small danger">Eliminar</a>

@@ -9,12 +9,13 @@ if (isset($_GET['id']))
         from cuotas
         inner join status_recibo on cuotas.status_recibo_id = status_recibo.id
         inner join recibo on cuotas.recibo_id = recibo.id
-        where recibo_id={$_GET['id']} order by recibo.id ", 5);
-$contrato = $pag->registros[0]['contrato_id'];
-$cuotas_cobradas = 0;
-$cuotas_pendientes = 0;
-$monto_cobrado = 0;
-$monto_pendiente = 0;
+        where recibo_id={$_GET['id']}", 5);
+if (count($pag->registros) > 0) {
+    $cuotas_cobradas = 0;
+    $cuotas_pendientes = 0;
+    $monto_cobrado = 0;
+    $monto_pendiente = 0;
+}
 // </editor-fold>
 ?>
 <!DOCTYPE html>
@@ -111,7 +112,10 @@ $monto_pendiente = 0;
                             <div class="alert-message">No hay resultados que mostrar</div>
                         <?php endif; ?>
                         <div class="actions">
-                            <a href="../contrato/recibos.php?id=<? echo $contrato; ?>" class="btn small ">Volver al listado de recibos</a>
+                            <a href="javascript:history.back()" class="btn small ">Volver al listado de recibos</a>
+                            <?php if(count($pag->registros)<1): ?>
+                            <a href="segmentar.php?recibo=<?php echo $_GET['id']; ?>" class="btn info">Segmentar Recibo rechazado</a>
+                            <?php endif; ?>
                         </div>
                     </div>
                     <div class="hide">

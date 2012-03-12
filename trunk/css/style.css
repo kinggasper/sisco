@@ -52,3 +52,6 @@ body {
 .content table thead th{
     text-transform: capitalize;
 }
+ul.breadcrumb li{
+    text-transform: capitalize;
+}

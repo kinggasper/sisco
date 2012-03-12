@@ -1,24 +1,31 @@
 <?php
+
 /**
  * Description of recibo
  *
  * @author Anyul Rivas
  */
 class recibo extends db implements crud {
+
     const tabla = "recibo";
-    //put your code here
+    const tabla_cuota = "cuotas";
+
     public function actualizar($id, $data) {
-        return $this->update(self::tabla, $data, array("id"=>$id));
+        return $this->update(self::tabla, $data, array("id" => $id));
     }
+
     public function borrar($id) {
-        return $this->delete(self::tabla, array("id"=>$id));
+        return $this->delete(self::tabla, array("id" => $id));
     }
+
     public function insertar($data) {
         return $this->insert(self::tabla, $data);
     }
+
     public function listar() {
         return $this->dame_query("select * from recibo");
     }
+
     public function ver($id) {
         return $this->dame_query("select recibo.*,
                 status_recibo.nombre 'status_recibo',
@@ -28,7 +35,8 @@ class recibo extends db implements crud {
                 inner join medio_pago on recibo.medio_pago_id = medio_pago.id
                 where recibo.id=$id");
     }
-    public function recibos_por_contrato($contrato){
+
+    public function recibos_por_contrato($contrato) {
         return $this->dame_query("
                 select recibo.*, 
         status_recibo.nombre 'status_recibo',
@@ -43,12 +51,37 @@ class recibo extends db implements crud {
                         order by recibo.id
                 ");
     }
-    
+
     public function recibos_pagados_por_contrato($contrato) {
-        $query="select * from recibo 
-            where contrato_id=".$contrato." and status_recibo_id=2";
+        $query = "select * from recibo 
+            where contrato_id=$contrato and status_recibo_id=2";
         return $this->dame_query($query);
     }
+/**
+ * Crea cuotas con segmentos del monto indicado para un recibo rechazado
+ * @param Integer $id id del Recibo
+ * @param float $monto monto a segmentar
+ * @param Integer $cuotas cantidad de cuotas 
+ */
+    public function segmentar_recibo($id, $monto, $cuotas) {
+        $monto_cuota = $monto / $cuotas;
+        $result = array();
+        try {
+            for ($i = 0; $i < $cuotas; $i++) {
+                $this->insert(self::tabla_cuota, array(
+                    "recibo_id" => $id,
+                    "monto" => $monto_cuota,
+                    "status_recibo_id" => 1));
+            }
+        } catch (Exception $exc) {
+            trigger_error($exc->getTraceAsString());
+            $result = array("suceed" => false);
+        }
+
+        $result = array("suceed" => true);
+        return $result;
+    }
+
 }
 
 ?>

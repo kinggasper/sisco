@@ -1,24 +1,13 @@
 <?php
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
-$pag = new paginacion();
 $usuario = new usuario();
 $usuario->confirmar_miembro();
-$query = "
-select 
-    lote.id, fecha_generacion, 
-    tipo_lote.nombre 'tipo_lote',
-    usuario.`Nombre`,
-    count(lote_detalle.recibo_id) 'recibos'
-    from lote
-        inner join tipo_lote on lote.tipo_lote_id = tipo_lote.id
-        inner join usuario on usuario.id = lote.usuario_id
-        inner join lote_detalle on lote_detalle.lote_id = lote.id
-            where empresa_id={$_SESSION['usuario']['empresa_id']}";
+$pag = new paginacion();
+$query = "select * from banco ";
 if (isset($_GET['filtrar'])) {
-    $query.=" and usuario.nombre like '%{$_GET['filtrar']}%' or date_format(fecha_generacion,'%d/%m/%Y') ='{$_GET['filtrar']}'";
+    $query.=" where banco.nombre like '%{$_GET['filtrar']}%'";
 }
-$query.=" group by lote.id";
 $pag->paginar($query, 5);
 // </editor-fold>
 ?>
@@ -46,11 +35,11 @@ $pag->paginar($query, 5);
         <div class="container">
             <div class="content">
                 <div class="page-header">
-                    <h1>Listar lotes <small> lotes disponibles</small> </h1>
+                    <h1>Listar bancos <small> bancos disponibles</small> </h1>
                 </div>
                 <ul class="breadcrumb">
                     <li><a href="../usuario">Sistema</a><span class="divider">&raquo;</span></li>
-                    <li><a href="listar.php">lote</a><span class="divider">&raquo;</span></li>
+                    <li><a href="listar.php">banco</a><span class="divider">&raquo;</span></li>
                     <li>Listar</li>
                 </ul>
                 <div class="row">
@@ -60,7 +49,7 @@ $pag->paginar($query, 5);
                                 <form class="">
                                     <label>Filtrar</label>
                                     <div class="input">
-                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar lote" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>" />
+                                        <input type="search" name="filtrar" id="filtrar" placeholder="Buscar banco" value="<?php echo isset($_GET['filtrar']) ? $_GET['filtrar'] : ""; ?>" />
                                     </div>
                                 </form>
                             </div>
@@ -68,10 +57,9 @@ $pag->paginar($query, 5);
                                 <thead>
                                     <tr>
                                         <th><a href="<?php echo misc::url_sortable(); ?>">id</a></th>
-                                        <th><a href="<?php echo misc::url_sortable("nombre"); ?>">Usuario</a></th>
-                                        <th><a href="<?php echo misc::url_sortable("fecha_generacion"); ?>">fecha</a></th>
-                                        <th><a href="<?php echo misc::url_sortable("tipo_lote"); ?>">Tipo Lote</a></th>
-                                        <th><a href="<?php echo misc::url_sortable("recibos"); ?>">Recibos</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("nombre"); ?>">Nombre</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("codigo"); ?>">C&oacute;digo</a></th>
+                                        <th><a href="<?php echo misc::url_sortable("web"); ?>">Rif</a></th>
                                         <th>Operaciones</th>
                                     </tr>
                                 </thead>
@@ -79,12 +67,12 @@ $pag->paginar($query, 5);
                                     <?php foreach ($pag->registros as $registro): ?>
                                         <tr>
                                             <td><?php echo $registro['id']; ?></td>
-                                            <td><?php echo $registro['Nombre']; ?></td>
-                                            <td><?php echo misc::date_format($registro['fecha_generacion']); ?></td>
-                                            <td><?php echo $registro['tipo_lote']; ?></td>
-                                            <td><?php echo $registro['recibos']; ?></td>
+                                            <td><?php echo $registro['nombre']; ?></td>
+                                            <td><?php echo $registro['codigo']; ?></td>
+                                            <td><?php echo $registro['web']; ?></td>
                                             <td>
-                                                <a href="ver.php?id=<?php echo $registro['id']; ?>" class="btn small info">Ver Recibos</a>
+                                                <a href="modificar.php?id=<?php echo $registro['id']; ?>" class="btn small info">Modificar</a>
+                                                <a href="borrar.php?id=<?php echo $registro['id']; ?>" class="btn small danger">Eliminar</a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -101,14 +89,13 @@ $pag->paginar($query, 5);
                             <div class="alert-message">No hay resultados que mostrar</div>
                         <?php endif; ?>
                         <div class="actions">
-                            <a href="crear.php" class="btn small primary">Crear Archivo</a>
-                            <a href="cargar.php" class="btn small info">Cargar archivo respuesta</a>
+                            <a href="crear.php" class="btn small primary">Crear banco</a>
                             <a href="../usuario" class="btn small ">Volver al menu</a>
                         </div>
                     </div>
                     <div class="hide">
                         <h3>Ayuda</h3>
-                        <p>Listado de lotes que emiten contratos</p>
+                        <p>Listado de bancos que emiten contratos</p>
                     </div>
                 </div>
                 <footer class="footer">

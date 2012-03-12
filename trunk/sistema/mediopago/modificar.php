@@ -95,7 +95,7 @@ if (isset($_POST['submit'])) {
                             <h3>Ayuda</h3>
                             <p>Ingrese los datos para modificar un mediopago</p>
                         </div>
-                        <div class="span12">
+                        <div class="span16">
                             <?php if ($registro['suceed'] && count($registro['data']) > 0): ?>
                                 <form method="post" action="">
                                     <?php $dato = $registro['data'][0]; ?>
@@ -116,9 +116,14 @@ if (isset($_POST['submit'])) {
                                             <label for="banco_id">Banco</label>
                                             <div class="input">
                                                 <select name="banco_id" id="banco_id">
-                                                    <?php foreach ($bancos['data'] as $banco): ?>
-                                                        <option <?php echo ($dato['banco_id'] == $banco['id']) ? "selected='true'" : ""; ?> value=" <?php echo $banco['id']; ?>"><?php echo $banco['nombre']; ?></option>
-                                                    <?php endforeach; ?>
+                                                    <optgroup label="N&oacute;mina">
+                                                        <option value="0">N&oacute;mina</option>
+                                                    </optgroup>
+                                                    <optgroup label="Bancos">
+                                                        <?php foreach ($bancos['data'] as $banco): ?>
+                                                            <option <?php echo ($dato['banco_id'] == $banco['id']) ? "selected='true'" : ""; ?> value=" <?php echo $banco['id']; ?>"><?php echo $banco['nombre']; ?></option>
+                                                        <?php endforeach; ?>
+                                                    </optgroup>
                                                 </select>
                                             </div>
                                         </div>

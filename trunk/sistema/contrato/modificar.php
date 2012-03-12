@@ -73,22 +73,26 @@ if (isset($_POST['submit'])) {
                             <p>Ingrese los datos para modificar un Contrato</p>
                         </div>
                         
-                        <div class="span12">
+                        <div class="span16">
+                            <div class="alert-message">
+                                <a href="listar.php" class="close">x</a>
+                                En Construcci&oacute;n
+                            </div>
                             <?php if ($registro['suceed'] && count($registro['data']) > 0): ?>
                                 <form method="post" action="">
                                     <?php $dato = $registro['data'][0]; ?>
                                     <fieldset>
                                     <legend>Datos del Contrato</legend>
                                     <div class="clearfix">
-                                        <label for="nombre">Número:<sup>*</sup></label>
+                                        <label for="numero">Número:<sup>*</sup></label>
                                         <div class="input">
-                                            <input class="required" type="text" name="nombre" id="nombre"/> 
+                                            <input class="required" disabled="true" type="text" name="numero" id="numero"/> 
                                         </div>
                                     </div>
                                     <div class="clearfix">
                                         <label for="empresa_id">Empresa:<sup>*</sup></label>
                                         <div class="input">
-                                            <select class="required" name="empresa_id">
+                                            <select class="required" name="empresa_id" disabled="true">
                                                     <?php foreach ($empresas['data'] as $valor): ?>
                                                         <option value="<?php echo $valor['id'] ?>"><?php echo $valor['nombre'] ?></option>
                                                     <?php endforeach; ?>
@@ -98,7 +102,7 @@ if (isset($_POST['submit'])) {
                                     <div class="clearfix">
                                         <label for="organismo_id">Organismo:<sup>*</sup></label>
                                         <div class="input">
-                                            <select name="organismo_id" id="organismo_id" class="required">
+                                            <select name="organismo_id" id="organismo_id" class="required" disabled="true">
                                                         <?php foreach ($organismos['data'] as $valor):?>
                                                     <option value="<?php echo $valor['id']; ?>"><?php echo $valor['nombre'] ?></option>
                                                             <?php endforeach;?>
@@ -108,7 +112,7 @@ if (isset($_POST['submit'])) {
                                     <div class="clearfix">
                                         <label for="status_contrato_id">Estatus:<sup>*</sup></label>
                                         <div class="input">
-                                            <select name="status_contrato_id" id="status_contrato_" class="required">
+                                            <select name="status_contrato_id" id="status_contrato_" class="required" disabled="true">
                                                         <?php foreach ($estatus['data'] as $valor):?>
                                                     <option value="<?php echo $valor['id']; ?>"><?php echo $valor['nombre'] ?></option>
                                                             <?php endforeach;?>
@@ -118,7 +122,7 @@ if (isset($_POST['submit'])) {
                                     <div class="clearfix">
                                         <label for="cliente_id">Cliente:<sup>*</sup></label>
                                         <div class="input">
-                                            <select name="cliente_id" id="cliente_id" class="required">
+                                            <select name="cliente_id" id="cliente_id" class="required" disabled="true">
                                                         <?php foreach ($clientes['data'] as $valor):?>
                                                     <option value="<?php echo $valor['id']; ?>"><?php echo $valor['Nombre'] ?></option>
                                                             <?php endforeach;?>
@@ -128,19 +132,19 @@ if (isset($_POST['submit'])) {
                                     <div class="clearfix">
                                         <label for="fecha">Fecha:<sup>*</sup></label>
                                         <div class="input">
-                                            <input class="required" id="datepicker" name="fecha" type="text">
+                                            <input class="required" id="datepicker" name="fecha" type="text" disabled="true">
                                         </div>
                                     </div>
                                     <div class="clearfix">
                                         <label for="comision">Comisión:<sup>*</sup></label>
                                         <div class="input">
-                                            <input type="text" name="comision" id="comision"/>
+                                            <input type="text" name="comision" id="comision" disabled="ture"/>
                                         </div>
                                     </div>
                                     <div class="clearfix">
                                         <label for="frecuencia">Frecuencia:<sup>*</sup></label>
                                         <div class="input">
-                                            <select name="frecuencia" id="frecuencia" class="required">
+                                            <select name="frecuencia" id="frecuencia" class="required" disabled="true">
                                                         <?php foreach ($frecuencia['data'] as $valor):?>
                                                     <option value="<?php echo $valor['id']; ?>"><?php echo $valor['nombre'] ?></option>
                                                             <?php endforeach;?>
@@ -150,7 +154,7 @@ if (isset($_POST['submit'])) {
                                     <div class="clearfix">
                                         <label for="numero_cuenta">Dirección:<sup>*</sup></label>
                                         <div class="input">
-                                            <input type="text" name="direccion" id="direccion" />
+                                            <input type="text" name="direccion" id="direccion" disabled="true" />
                                         </div>
                                     </div>
                                 </fieldset>

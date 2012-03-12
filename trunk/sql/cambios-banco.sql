@@ -1,0 +1,1 @@
+ALTER TABLE  `banco` ADD  `codigo` VARCHAR( 50 ) NOT NULL DEFAULT  '000' AFTER  `nombre`
