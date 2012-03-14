@@ -2,7 +2,7 @@
 // <editor-fold defaultstate="collapsed" desc="php">
 require '../../includes/constants.php';
 $producto = new producto();
-$empresa = new Empresa();
+$empresa = new empresa();
 $usuario = new usuario();
 $categoria = new categoria();
 $usuario->confirmar_miembro();
