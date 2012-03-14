@@ -84,9 +84,9 @@ class contrato extends db implements crud {
             where contrato_productos.contrato_id = $id");
     }
 
-    public function emitirContrato($data, $producto, $cantidad, $costo) {
+    public function emitirContrato($data, $producto, $cantidad, $costo, $medio_pago) {
         $resultado = array("suceed" => false);
-        try {
+        try { 
             $this->exec_query("start transaction");
             $resultado['registrar_contrato'] = $this->insertar($data);
             // registramos ahora los productos
@@ -119,7 +119,8 @@ class contrato extends db implements crud {
 
                 $res = $this->generarRecibos($data['cliente_id'], $contrato_id, $data['frecuencia_id'], $plazo['data'][0]['nombre']);
                 $monto_recibo = $monto / $res;
-                $this->exec_query("update recibo set monto=" . $monto_recibo . " where contrato_id=" . $contrato_id);
+                $this->exec_query("update recibo set monto=" . $monto_recibo . 
+                        ", medio_pago_id=".$medio_pago." where contrato_id=" . $contrato_id);
                 $comision = $monto * ($data['porcentaje_vendedor'] / 100);
 
                 $this->exec_query("update contrato join configuracion set contrato.monto=" . $monto . ", 
