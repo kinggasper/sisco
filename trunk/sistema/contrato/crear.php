@@ -32,8 +32,8 @@ if (isset($_POST['submit'])) {
     unset($data['sel_cantidad']);
     unset($data['producto']);
     unset($data['cantidad']);
-
-    $resultado = $contrato->emitirContrato($data, $_POST['producto'], $_POST['cantidad'],$_POST['costo']);
+    unset($data['medio_pago_id']);
+    $resultado = $contrato->emitirContrato($data, $_POST['producto'], $_POST['cantidad'],$_POST['costo'],$_POST['medio_pago_id']);
     //$resultado = $contrato->emitirContrato($contrato,$detalle);
 }
 // </editor-fold>
@@ -62,9 +62,10 @@ if (isset($_POST['submit'])) {
         <script>
             $(document).ready(function() {
                 $("#agregar_productos").validate();
+                $("#registrarMedioPago").validate();
                 
                 $("#medio_pago_id").change(function() {
-                   if ($(this).val()) {
+                   if ($(this).val()=="0") {
                        $('#registrarMedioPago').modal('show');
                    } 
                 });
@@ -76,15 +77,39 @@ if (isset($_POST['submit'])) {
                         min:"Especifique el medio de pago."
                     }
                  });
-                 $("#tipo_medio_pago_id").change(function(){
-                    $("#datosBanco").toggle(); 
+                 $("#tipo_medio_pago_id").change(function() {
+                    
+                    if($(this).val()=="1"){
+                        $("#banco_id").removeClass("required");
+                        $("#numero_cuenta").removeClass("required");
+                        $("#datosBanco").hide();
+                    } else {
+                        $("#banco_id").addClass("required");
+                        $("#numero_cuenta").addClass("required");
+                        $("#datosBanco").show();
+                    }
                  });
                  $("#cliente_id").change(function(){
-                    $("#usuario_id").attr('value',$(this).val()); 
+                    $("#usuario_id").attr('value',$(this).val());
+                    $.getJSON('<?php echo ROOT; ?>/includes/json.php', {accion: 'listar_medio_pago',cliente:$(this).val()}, 
+                        function(data){
+                            if(data.suceed) {
+                                $("#medio_pago_id option").remove();
+                                $("<option value=\"\">&nbsp;</option>").appendTo("#medio_pago_id");
+                                $("<option value=\"0\">Agregar Medio Pago</option>").appendTo("#medio_pago_id");
+                                for(var elemento in data.data){
+                                    if( typeof data.data[elemento] == "object"){
+                                        $("<option value='"+ data.data[elemento].id + "'>"+ data.data[elemento].medio_pago  +"</option>")
+                                        .appendTo("#medio_pago_id");
+                                    }
+                                }
+                            }
+                        });
                  });
                 $("#organismo_id").change(function(){
                     $.getJSON('<?php echo ROOT; ?>/includes/json.php', {accion:'clientes_organismo', organismo:$(this).val()}, function(data){
                         $("#cliente_id option").remove();
+                        $("#medio_pago_id option").remove();
                         if(data.suceed){
                             $("<option>Seleccione Cliente</option>").appendTo("#cliente_id");
                             for(var elemento in data.data){
@@ -114,10 +139,37 @@ if (isset($_POST['submit'])) {
                         $("#numero_productos").html($("#productos tbody tr").length);
                     }
                 });
-                $("#agregar").click(function(){
-                    if($("#registrarMedioPago").valid()){
-                        
-                    }
+                $("#registrar").click(function(){
+                    if($("#medio_pago").valid()){
+                        $.getJSON('<?php echo ROOT; ?>/includes/json.php', 
+                        {accion:'agregar_medio_pago',
+                         tipo_medio_pago_id:$('#tipo_medio_pago_id').val(),
+                         banco_id:$("#banco_id").val(),
+                         numero_cuenta:$("#numero_cuenta").val(),
+                         usuario_id:$("#usuario_id").val()
+                        }, 
+                        function(data){
+                            if (data.suceed) {
+                                $.getJSON('<?php echo ROOT; ?>/includes/json.php',{
+                                    accion:'listar_medio_pago',
+                                    cliente:$("#usuario_id").val()},
+                                function(data){
+                                   if (data.suceed) {
+                                       $("#medio_pago_id option").remove();
+                                       for(var elemento in data.data){
+                                            if( typeof data.data[elemento] == "object"){
+                                                $("<option value='"+ data.data[elemento].id + "'>"+ data.data[elemento].medio_pago +"</option>")
+                                                .appendTo("#medio_pago_id");
+                                            }
+                                        }
+                                   }
+                                   $("#registrarMedioPago").modal('toggle');
+                                });
+                            } else {
+                                alert(data.stats.error);
+                            }
+                        });
+                    } 
                 });
                 $("#sel_producto").change(function() {
                     
@@ -219,7 +271,7 @@ if (isset($_POST['submit'])) {
                                                 <label for="organismo_id">Organismo:<sup>*</sup></label>
                                                 <div class="input">
                                                     <select name="organismo_id" id="organismo_id" class="required">
-                                                        <option>Seleccione</option>
+                                                        <option value="">Seleccione</option>
                                                         <?php foreach ($organismos['data'] as $valor): ?>
                                                             <option value="<?php echo $valor['id']; ?>"><?php echo $valor['nombre'] ?></option>
                                                         <?php endforeach; ?>
@@ -256,8 +308,7 @@ if (isset($_POST['submit'])) {
                                                 <label for="medio_pago_id">Medio de Pago:<sup>*</sup></label>
                                                 <div class="input">
                                                     <select name="medio_pago_id" class="required" id="medio_pago_id">
-                                                    <option >&nbsp;</option>
-                                                    <option value="0">Agregar Medio de Pago</option>
+                                                    <option value="0">Seleccione un cliente</option>
                                                     </select>
                                                     
                                                 </div>
@@ -384,7 +435,7 @@ if (isset($_POST['submit'])) {
                                                         <div class="input">
                                                             <div class="input-append">
                                                                 <select name="banco_id" class="required" id="banco_id">
-                                                                    <option>Seleccione Banco</option>
+                                                                    <option value="">Seleccione Banco</option>
                                                                     <?php foreach ($bancos['data'] as $dato): ?>
                                                                     <option value="<?php echo $dato['id']; ?>"><?php echo $dato['nombre']; ?></option>
                                                                 <?php endforeach; ?>
