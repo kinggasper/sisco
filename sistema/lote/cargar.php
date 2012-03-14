@@ -10,6 +10,9 @@ $mediopago = new mediopago();
 $organismos = $organismo->listar();
 $bancos = $banco->listar();
 $tipos_medio_pago = $mediopago->listar_tipo_medio_pagos();
+if(isset($_POST['enviar'])){
+    
+}
 // </editor-fold>
 ?>
 <!DOCTYPE html>
