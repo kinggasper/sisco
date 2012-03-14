@@ -9,13 +9,17 @@ $vendedor = new vendedor();
 $organismo = new organismo();
 $frecuencia = new frecuencia();
 $producto = new producto();
+$medio_pago = new mediopago();
 $plazo = new plazo();
+$banco = new banco();
 
 //$clientes = $cliente->listar();
 $vendedores = $vendedor->vendedor_por_empresa($_SESSION['usuario']['empresa_id']);
 $organismos = $organismo->listar();
 $frecuencias = $frecuencia->listar();
 $productos = $producto->productosConExistencia();
+$tipo_medio_pago = $medio_pago->listar_tipo_medio_pagos();
+$bancos = $banco -> listar();
 $plazos = $plazo->listar();
 $resultado = array("suceed" => false);
 if (isset($_POST['submit'])) {
@@ -53,14 +57,38 @@ if (isset($_POST['submit'])) {
         <script src="<?php echo ROOT; ?>/js/jquery-ui-1.8.16.custom.min.js"></script>
         <script src="<?php echo ROOT; ?>/js/jquery-validate/jquery.validate.pack.js"></script>
         <script src="<?php echo ROOT; ?>/js/jquery-validate/localization/messages_es.js"></script>
+        <script src="<?php echo ROOT; ?>/js/bootstrap-modal.js"></script>
         <script src="<?php echo ROOT; ?>/js/forms.js"></script>
         <script>
             $(document).ready(function() {
+                $("#agregar_productos").validate();
+                
+                $("#medio_pago_id").change(function() {
+                   if ($(this).val()) {
+                       $('#registrarMedioPago').modal('show');
+                   } 
+                });
+                $("#medio_pago_id").rules("add",{
+                    required:true,
+                    min:1,
+                    messages:{
+                        required:"Falta medio de pago.",
+                        min:"Especifique el medio de pago."
+                    }
+                 });
+                 $("#tipo_medio_pago_id").change(function(){
+                    $("#datosBanco").toggle(); 
+                 });
+                 $("#cliente_id").change(function(){
+                    $("#usuario_id").attr('value',$(this).val()); 
+                 });
                 $("#organismo_id").change(function(){
                     $.getJSON('<?php echo ROOT; ?>/includes/json.php', {accion:'clientes_organismo', organismo:$(this).val()}, function(data){
                         $("#cliente_id option").remove();
                         if(data.suceed){
+                            $("<option>Seleccione Cliente</option>").appendTo("#cliente_id");
                             for(var elemento in data.data){
+                                
                                 if( typeof data.data[elemento] == "object"){
                                     $("<option value='"+ data.data[elemento].id + "'>"+ data.data[elemento].Nombre +" "+data.data[elemento].Apellido+"</option>")
                                     .appendTo("#cliente_id");
@@ -71,11 +99,7 @@ if (isset($_POST['submit'])) {
                 });
                 $("#tabs").tabs();
                 $("#agregar").click(function(){
-                    if ($("#cantidad").val() > $("#disponible").val()) {
-                        
-                        alert("Introdujo una cantidad mayor a la disponibilidad de este produto.");
-                        
-                    } else {
+                    if($("#agregar_productos").valid()){
                         input_hidden = $("<input/>",{type:'hidden',name:'producto[]',value:$("#sel_producto").val()});
                         tdNombre = $("<td/>",{html:'<span>'+$("#sel_producto option:selected").text()+'</span>'}).append(input_hidden);
                         input_cantidad = $("<input/>",{"class":"mini",type:"text",readOnly:true,name:"cantidad[]",value:$("#cantidad").val()});
@@ -88,6 +112,11 @@ if (isset($_POST['submit'])) {
                         $("#productos tbody").append(tr);
                         $("#sel_producto option:selected").remove();
                         $("#numero_productos").html($("#productos tbody tr").length);
+                    }
+                });
+                $("#agregar").click(function(){
+                    if($("#registrarMedioPago").valid()){
+                        
                     }
                 });
                 $("#sel_producto").change(function() {
@@ -221,56 +250,26 @@ if (isset($_POST['submit'])) {
                                                 
                                             </div>
                                         </fieldset>
-                                    </div>
-                                    <div id="fragment-2">
-                                        <div>
-                                            <div class="row">
-                                                <div class="span16">
-                                                    <fieldset>
-                                                        <div class="clearfix">
-                                                            <label for="producto">Producto:</label>
-                                                            <div class="input">
-                                                                <select name="sel_producto" class="" id="sel_producto">
-                                                                    <option value="">Seleccione un producto</option>
-                                                                    <?php foreach ($productos['data'] as $dato): ?>
-                                                                        <option value="<?php echo $dato['id']; ?>"><?php echo $dato['nombre']; ?></option>
-                                                                    <?php endforeach; ?>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                        <div class="clearfix">
-                                                            <label for="disponible">Disponible:</label>
-                                                            <div class="input">
-                                                                <div class="input-append">
-                                                                    <input type="text" name="disponible" id="disponible" class="number small" readonly="readonly" value="0"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="clearfix">
-                                                            <label for="costo">Costo:</label>
-                                                            <div class="input">
-                                                                <div class="input-append">
-                                                                    <input type="text" name="costo" id="costo" class="number small" readonly="readonly" value="0"/>
-                                                                    <span class="add-on">Bsf.</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="clearfix">
-                                                            <label for="cantidad">Cantidad:</label>
-                                                            <div class="input">
-                                                                <input type="text" name="cantidad" id="cantidad" placeholder="0" class="mini required" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="clearfix">
-                                                            <div class="input">
-                                                                <input type="button" name="agregar" id="agregar" name="agregar" value="Agregar Producto" class="btn info"/>
-                                                            </div>
-                                                        </div>
-                                                    </fieldset>
+                                        <fieldset>
+                                            <legend>Medio de Pago</legend>
+                                            <div class="clearfix">
+                                                <label for="medio_pago_id">Medio de Pago:<sup>*</sup></label>
+                                                <div class="input">
+                                                    <select name="medio_pago_id" class="required" id="medio_pago_id">
+                                                    <option >&nbsp;</option>
+                                                    <option value="0">Agregar Medio de Pago</option>
+                                                    </select>
+                                                    
                                                 </div>
                                             </div>
-                                        </div>
+                                        </fieldset>
+                                    </div>
+                                    <div id="fragment-2">
+                                        
                                         <div>
+                                            <p>
+                                            <a class="btn info" data-toggle="modal" href="#myModal" >Agregar Productos</a>
+                                            </p>
                                             <table class="bordered-table zebra-striped" id="productos">
                                                 <thead>
                                                     <tr>
@@ -304,6 +303,117 @@ if (isset($_POST['submit'])) {
                                     </div>
                                 </fieldset>
                             </form>
+                            <div id="myModal" class="modal" style="display:none;">
+                                <div class="modal-header">
+                                    <a class="close" data-dismiss="modal">x</a>
+                                    <h3>Productos disponibles</h3>
+                                </div>
+                                    <form id="agregar_productos" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                                        <div class="row">
+                                            <div class="span16">
+                                                <fieldset>
+                                                    <div class="clearfix">
+                                                        <label for="sel_producto">Producto:</label>
+                                                        <div class="input">
+                                                            <select name="sel_producto" class="required" id="sel_producto">
+                                                                <option value="">Seleccione un producto</option>
+                                                                <?php foreach ($productos['data'] as $dato): ?>
+                                                                    <option value="<?php echo $dato['id']; ?>"><?php echo $dato['nombre']; ?></option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix">
+                                                        <label for="disponible">Disponible:</label>
+                                                        <div class="input">
+                                                            <div class="input-append">
+                                                                <input type="text" name="disponible" id="disponible" class="required number small" readonly="readonly" value="0"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix">
+                                                        <label for="costo">Costo:</label>
+                                                        <div class="input">
+                                                            <div class="input-append">
+                                                                <input type="text" name="costo" id="costo" class="required number small" readonly="readonly" value="0"/>
+                                                                <span class="add-on">Bsf.</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix">
+                                                        <label for="cantidad">Cantidad:</label>
+                                                        <div class="input">
+                                                            <input type="text" name="cantidad" id="cantidad" placeholder="0" class="mini required" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix">
+                                                        <div class="input">
+                                                            <input type="button" name="agregar" id="agregar" name="agregar" value="Agregar Producto" class="btn primary"/>
+                                                            <a class="btn" href="#" data-dismiss="modal">Cerrar</a>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            <div id="registrarMedioPago" class="modal" style="display:none;">
+                                    <div class="modal-header">
+                                        <a class="close" data-dismiss="modal">x</a>
+                                        <h3>Medios de Pago</h3>
+                                    </div>
+                                    <form id="medio_pago" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                                        <div class="row">
+                                            <div class="span16">
+                                                <fieldset>
+                                                    <div class="clearfix">
+                                                        <label for="tipo_medio_pago_id">Tipo Medio Pago:</label>
+                                                        <div class="input">
+                                                            <select name="tipo_medio_pago_id" class="required" id="tipo_medio_pago_id">
+                                                                <option value="">Seleccione Tipo</option>
+                                                                <?php foreach ($tipo_medio_pago['data'] as $dato): ?>
+                                                                    <option value="<?php echo $dato['id']; ?>"><?php echo $dato['nombre']; ?></option>
+                                                                <?php endforeach; ?>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div id="datosBanco">
+                                                    <div class="clearfix">
+                                                        <label for="banco_id">Banco:</label>
+                                                        <div class="input">
+                                                            <div class="input-append">
+                                                                <select name="banco_id" class="required" id="banco_id">
+                                                                    <option>Seleccione Banco</option>
+                                                                    <?php foreach ($bancos['data'] as $dato): ?>
+                                                                    <option value="<?php echo $dato['id']; ?>"><?php echo $dato['nombre']; ?></option>
+                                                                <?php endforeach; ?>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clearfix">
+                                                        <label for="numero_cuenta">N&uacute;mero de Cuenta:</label>
+                                                        <div class="input">
+                                                            <div class="input-append">
+                                                                <input type="text" name="numero_cuenta" id="numero_cuenta" class="required number"  value=""/>
+                                                                <input type="hidden" name="usuario_id" id="usuario_id" value="" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="clearfix">
+                                                        <div class="input">
+                                                            <input type="button" name="registrar" id="registrar" value="Registrar" class="btn primary"/>
+                                                            <a class="btn" href="#" data-dismiss="modal">Cerrar</a>
+                                                                    
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                         </div>
                     </div>
                 <?php endif; ?>
