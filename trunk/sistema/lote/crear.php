@@ -88,8 +88,8 @@ $tipos_medio_pago = $mediopago->listar_tipo_medio_pagos();
                                     <label for="tipo_cobro">Tipo de Cobro</label>
                                     <div class="input">
                                         <select id="tipo_cobro" name="tipo_cobro" class="required">
-                                            <option>Pendientes</option>
-                                            <option>Rechazadas</option>
+                                            <option value="1">Pendientes</option>
+                                            <option value="3">Rechazadas</option>
                                         </select>
                                     </div>
                                 </div>
