@@ -27,8 +27,8 @@ if (isset($_GET['id'])) {
     </head>
     <body>
         <?php include TEMPLATE . 'topbar.php'; ?>
-        <div class="container-fluid">
-            <?php include TEMPLATE . 'sidebar.php'; ?>
+        <div class="container">
+            
             <div class="content">
                 <div class="page-header">
                     <h1>Borrar usuario</h1>
