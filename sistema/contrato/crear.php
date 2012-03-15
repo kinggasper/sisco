@@ -182,6 +182,14 @@ if (isset($_POST['submit'])) {
                         }
                     });
                 });
+                $("#valor").rules("add",{
+                    required:function(){
+                        return ($("#productos").find("input[name='producto[]']").length==0);
+                    },
+                    messages:{
+                        required:"Debe agregar al menos un producto para procesar un contrato."
+                    }
+                });
                 $(document).on("click",".danger",function(){
                     if(confirm("Realmente desea borrar este registro?"))
                     {
