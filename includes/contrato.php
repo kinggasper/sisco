@@ -17,7 +17,6 @@ class contrato extends db implements crud {
         $resultado = array("suceed" => false);
         if (!$this->contratoRecibosPagados($id)) {
             try {
-
                 $this->exec_query("start transaction");
                 $this->exec_query("delete from recibo where contrato_id=" . $id);
                 $this->exec_query("delete from contrato_productos where contrato_id=" . $id);
@@ -93,12 +92,14 @@ class contrato extends db implements crud {
             if ($resultado['registrar_contrato']['insert_id'] > 0) {
 
                 $contrato_id = $resultado['registrar_contrato']['insert_id'];
-
+                var_dump($producto);
+                var_dump($cantidad);
                 if (is_array($producto) && is_array($cantidad)) {
                     $monto = 0;
                     for ($i = 0; $i < sizeof($producto); $i++) {
                         while ($cantidad[$i] > 0) {
                             $producto_almacen = $this->actualizarProductoAlmacen($producto[$i], $cantidad[$i]);
+                            
                             $resultado['contrato_productos'] = $this->insert(
                                     "contrato_productos", Array(
                                 "contrato_id" => $contrato_id,
@@ -106,13 +107,13 @@ class contrato extends db implements crud {
                                 "almacen_id" => $producto_almacen["almacen"],
                                 "cantidad" => $producto_almacen["cantidad"],
                                 "precio" => $costo[$i]));
-
                             $cantidad[$i] -= $producto_almacen["cantidad"];
-                            $monto += $costo[$i];
+                            $monto += ($costo[$i] * $cantidad[$i]);
                         }
                     }
+                    
                 }
-
+                
                 // registramos ahora los recibos
                 $plazos = new plazo();
                 $plazo = $plazos->ver($data['plazo_id']);

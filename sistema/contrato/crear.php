@@ -63,11 +63,10 @@ if (isset($_POST['submit'])) {
             $(document).ready(function() {
                 $("#agregar_productos").validate();
                 $("#registrarMedioPago").validate();
-                
-                $("#medio_pago_id").change(function() {
-                   if ($(this).val()=="0") {
-                       $('#registrarMedioPago').modal('show');
-                   } 
+                $('a[href|=#registrarMedioPago]').click(function() {
+                    if (!$("#cliente_id").valid()) {
+                    return false;
+                    }
                 });
                 $("#medio_pago_id").rules("add",{
                     required:true,
@@ -96,7 +95,6 @@ if (isset($_POST['submit'])) {
                             if(data.suceed) {
                                 $("#medio_pago_id option").remove();
                                 $("<option value=\"\">&nbsp;</option>").appendTo("#medio_pago_id");
-                                $("<option value=\"0\">Agregar Medio Pago</option>").appendTo("#medio_pago_id");
                                 for(var elemento in data.data){
                                     if( typeof data.data[elemento] == "object"){
                                         $("<option value='"+ data.data[elemento].id + "'>"+ data.data[elemento].medio_pago  +"</option>")
@@ -111,7 +109,7 @@ if (isset($_POST['submit'])) {
                         $("#cliente_id option").remove();
                         $("#medio_pago_id option").remove();
                         if(data.suceed){
-                            $("<option>Seleccione Cliente</option>").appendTo("#cliente_id");
+                            $("<option value=\"\">Seleccione Cliente</option>").appendTo("#cliente_id");
                             for(var elemento in data.data){
                                 
                                 if( typeof data.data[elemento] == "object"){
@@ -310,8 +308,10 @@ if (isset($_POST['submit'])) {
                                                     <select name="medio_pago_id" class="required" id="medio_pago_id">
                                                     <option value="0">Seleccione un cliente</option>
                                                     </select>
-                                                    
+                                                    <br />
+                                                    <p><a class="btn info" data-toggle="modal" href="#registrarMedioPago">Agregar Medio de Pago</a> </p>
                                                 </div>
+                                                
                                             </div>
                                         </fieldset>
                                     </div>
