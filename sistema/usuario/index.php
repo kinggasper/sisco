@@ -32,44 +32,44 @@ $usuario->confirmar_miembro();
                 <h2>M&oacute;dulos disponibles</h2>
                 <div class="row">
                     <div class="span4">
-                        <h2>Almacenes</h2>
+                        <h3>Almacenes</h3>
                         <p>Almacenes disponibles</p><br/>
                         <a href="../almacen/listar.php" class="btn info small">Entrar</a>
                     </div>
                     <div class="span4">
-                        <h2>Empresas</h2>
+                        <h3>Empresas</h3>
                         <p>Gestión de empresas</p><br/>
                         <a href="../empresa/listar.php" class="btn info small">Entrar</a>
                     </div>
                     <div class="span4">
-                        <h2>Organismos</h2>
+                        <h3>Organismos</h3>
                         <p>Administra los organismos disponibles y sus clientes</p>
                         <a href="../organismo/listar.php" class="btn info small">Entrar</a>
                     </div>
                     <div class="span4">
-                        <h2>Reportes</h2>
+                        <h3>Reportes</h3>
                         <p>Realice consultas al sistema y exp&oacute;rtelas en formato PDF.</p>
                         <a href="../reporte/listar.php" class="btn info small">Entrar</a>
                     </div>
                 </div>
                 <div class="row">
                     <div class="span4">
-                        <h2>Clientes</h2>
+                        <h3>Clientes</h3>
                         <p>Administrar clientes</p>
                         <a class="btn info small" href="../cliente/listar.php">Entrar</a>
                     </div>
                     <div class="span4">
-                        <h2>Productos</h2>
+                        <h3>Productos</h3>
                         <p>Administrar Productos disponibles</p>
                         <a class="btn info small" href="../producto/listar.php">Entrar</a>
                     </div>
                     <div class="span4">
-                        <h2>Usuarios</h2>
+                        <h3>Usuarios</h3>
                         <p>Administrar usuarios disponibles</p>
                         <a class="btn info small" href="../usuario/listar.php">Entrar</a>
                     </div>
                     <div class="span4">
-                        <h2>Vendedores</h2>
+                        <h3>Vendedores</h3>
                         <p>Administrar Vendedores disponibles</p>
                         <a class="btn info small" href="../vendedor/listar.php">Entrar</a>
                     </div>
@@ -77,22 +77,22 @@ $usuario->confirmar_miembro();
                 </div>
                 <div class="row">
                     <div class="span4">
-                        <h2>Contratos</h2>
+                        <h3>Contratos</h3>
                         <p>Emite y revisa contratos emitidos</p>
                         <a href="../contrato/listar.php" class="btn small info">Entrar</a>
                     </div>
                     <div class="span4">
-                        <h2>Lotes</h2>
+                        <h3>Lotes</h3>
                         <p>Crea y carga lote de cobros</p>
                         <a href="../lote/listar.php" class="btn small info">Entrar</a>
                     </div>
                     <div class="span4">
-                        <h2>Bitacora</h2>
+                        <h3>Bitacora</h3>
                         <p>Revisa la bitacora del sistema</p>
                         <a href="../bitacora/listar.php" class="btn small info">Entrar</a>
                     </div>
                     <div class="span4">
-                        <h2>Banco</h2>
+                        <h3>Banco</h3>
                         <p>Administraci&oacute;n de Banco</p>
                         <a href="../banco/listar.php" class="btn small info">Entrar</a>
                     </div>
