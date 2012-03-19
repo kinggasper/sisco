@@ -24,7 +24,7 @@ include 'includes/constants.php';
                 </div>
             </div>
             <footer>
-                <p>&copy; Aled Multimedia Solutions 2011</p>
+                <p>&copy; Aled Multimedia Solutions <?php echo date("Y"); ?></p>
             </footer>
         </div>
     </body>
