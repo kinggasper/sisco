@@ -1,5 +1,5 @@
 <div class="topbar">
-    <?php if (isset($_SESSION)): ?>
+    <?php if (isset($_SESSION['usuario'])): ?>
         <div class="topbar-inner">
             <div class="container-fluid">
                 <a class="brand" href="#">SISCO</a>
