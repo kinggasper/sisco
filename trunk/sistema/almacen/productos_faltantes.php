@@ -13,8 +13,7 @@ $pag->paginar("select
         left outer join producto_almacen on producto.id = producto_almacen.producto_id
         left outer join almacen on almacen.id = producto_almacen.almacen_id
             where ifnull(producto_almacen.cantidad, 0) < producto.cantidad_minima
-            and producto.empresa_id ={$_SESSION['usuario']['empresa_id']}
-                order by producto.id", 5);
+            and producto.empresa_id ={$_SESSION['usuario']['empresa_id']}", 5);
 // </editor-fold>
 ?>
 <!DOCTYPE html>
