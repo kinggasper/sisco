@@ -85,6 +85,7 @@ class contrato extends db implements crud {
 
     public function emitirContrato($data, $producto, $cantidad, $costo, $medio_pago) {
         $resultado = array("suceed" => false);
+        $bitacora = new bitacora();
         try { 
             $this->exec_query("start transaction");
             $resultado['registrar_contrato'] = $this->insertar($data);
@@ -130,9 +131,11 @@ class contrato extends db implements crud {
             }
             $resultado['suceed'] = true;
             $this->exec_query("commit");
+            $bitacora->log($_SESSION['usuario'], "Emision contrato. OK!");
             return $resultado;
         } catch (Exception $exc) {
             $this->exec_query("rollback");
+            $bitacora->log($_SESSION['usuario'], "Emision contrato. Fallido");
             trigger_error("Error al emitir el contrato" . $exc->getTraceAsString());
             return $resultado;
         }

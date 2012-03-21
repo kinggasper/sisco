@@ -190,6 +190,14 @@ if (isset($_POST['submit'])) {
                         required:"Debe agregar al menos un producto para procesar un contrato."
                     }
                 });
+                $("#cantidad").rules("add", {
+                   max:function() {
+                       return ($("#disponible").val());
+                   },
+                   messages:{
+                       max:"Cantidad mayor a lo disponible."
+                   }
+                });
                 $(document).on("click",".danger",function(){
                     if(confirm("Realmente desea borrar este registro?"))
                     {
