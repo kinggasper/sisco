@@ -18,15 +18,19 @@ class usuario extends db implements crud {
         $this->exec_query("insert into usuario_empresa_rol(usuario_id,empresa_id,tipo_usuario_id) values({$result['insert_id']}, {$empresa}, {$tipo_usuario})
 on duplicate key update tipo_usuario_id = {$tipo_usuario};");
         return $result;
-        
     }
 
     public function actualizar($id, $data) {
-        return $this->update(self::tabla, $data, array("id" => $id));
+        $result = $this->update(self::tabla, $data, array("id" => $id));
+        $this->log("Usuario $id:{$data['Nombre']} actualizado.");
+        return $result; 
     }
 
     public function borrar($id) {
-        return $this->delete(self::tabla, $id);
+        $temp_usuario = $this->ver($id);
+        $result = $this->delete(self::tabla, $id);
+        $this->log("Usuario $id:{$temp_usuario['Nombre']} Borrado.");
+        return $result;
     }
 
     /**

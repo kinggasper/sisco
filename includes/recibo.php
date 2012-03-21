@@ -11,7 +11,9 @@ class recibo extends db implements crud {
     const tabla_cuota = "cuotas";
 
     public function actualizar($id, $data) {
-        return $this->update(self::tabla, $data, array("id" => $id));
+        $result = $this->update(self::tabla, $data, array("id" => $id));
+        $this->log("Recibo $id actualizado");
+        return $result;
     }
 
     public function borrar($id) {
@@ -57,12 +59,13 @@ class recibo extends db implements crud {
             where contrato_id=$contrato and status_recibo_id=2";
         return $this->dame_query($query);
     }
-/**
- * Crea cuotas con segmentos del monto indicado para un recibo rechazado
- * @param Integer $id id del Recibo
- * @param float $monto monto a segmentar
- * @param Integer $cuotas cantidad de cuotas 
- */
+
+    /**
+     * Crea cuotas con segmentos del monto indicado para un recibo rechazado
+     * @param Integer $id id del Recibo
+     * @param float $monto monto a segmentar
+     * @param Integer $cuotas cantidad de cuotas 
+     */
     public function segmentar_recibo($id, $monto, $cuotas) {
         $monto_cuota = $monto / $cuotas;
         $result = array();

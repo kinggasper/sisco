@@ -70,6 +70,7 @@ if (isset($_POST['submit'])) {
                         </div>
                         <div class="span16">
                             <form method="post" action="">
+                                <input type="hidden" name="empresa_id" value="<?php echo $_SESSION['usuario']['empresa_id']; ?>"/>
                                 <fieldset>
                                     <legend>Datos del almacen</legend>
                                     <div class="clearfix">

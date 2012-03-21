@@ -11,14 +11,20 @@ class cliente extends db implements crud {
 
     public function actualizar($id, $data) {
         return $this->update(self::tabla, $data, array("id" => $id));
+        $this->log("Cliente $id:{$data['nombre']} actualizado.");
     }
 
     public function borrar($id) {
-        return $this->delete(self::tabla, array("id" => $id));
+        $temp = $this->ver($id);
+        $result = $this->delete(self::tabla, array("id" => $id));
+        $this->log("Cliente $id:{$temp['Nombre']} {$temp['Apellido']} borrado.");
+        return $result;
     }
 
     public function insertar($data) {
-        return $this->insert(self::tabla, $data);
+        $result = $this->insert(self::tabla, $data);
+        $this->log("Cliente {$result['insert_id']}:{$temp['Nombre']} {$temp['Apellido']}");
+        return $result;
     }
 
     public function listar() {

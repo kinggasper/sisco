@@ -14,15 +14,21 @@ class lote extends db implements crud {
     const rechazado = "3";
 
     public function actualizar($id, $data) {
-        return $this->update(self::tabla, $data, array("id" => $id));
+        $result = $this->update(self::tabla, $data, array("id" => $id));
+        $this->log("Lote $id:" . Misc::date_format($data['fecha']) . " actualizado.");
+        return $result;
     }
 
     public function borrar($id) {
-        return $this->delete(self::tabla, array("id" => $id));
+        $result = $this->delete(self::tabla, array("id" => $id));
+        $this->log("Lote $id borrado.");
+        return $result;
     }
 
     public function insertar($data) {
-        return $this->insert(self::tabla, $data);
+        $result = $this->insert(self::tabla, $data);
+        $this->log("Lote Creado");
+        return $result;
     }
 
     public function listar() {
@@ -94,8 +100,7 @@ class lote extends db implements crud {
         }
         // </editor-fold>
         // <editor-fold defaultstate="collapsed" desc="bitacora">
-        $bitacora = new bitacora();
-        $bitacora->log($_SESSION['usuario']['id'], "Modulo de Lotes");
+        $this->log("Lote generadso");
         // </editor-fold>
         return $recibos;
     }
@@ -109,6 +114,7 @@ class lote extends db implements crud {
         //TODO cancelar contratos con todos los recibos cobrados
         //TODO actualizar recibos rechazados
         //TODO cambiar a incobrables contratos con recibos morosos
+        $this->log("Lote Cargado");
         echo $tipo_lote;
     }
 

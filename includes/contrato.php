@@ -10,7 +10,9 @@ class contrato extends db implements crud {
     const tabla = "contrato";
 
     public function actualizar($id, $data) {
-        return $this->update(self::tabla, $data, array("id" => $id));
+        $result= $this->update(self::tabla, $data, array("id" => $id));
+        $this->log("Contrato $id actualizado.");
+        return $result;
     }
 
     public function borrar($id) {
@@ -22,6 +24,7 @@ class contrato extends db implements crud {
                 $this->exec_query("delete from contrato_productos where contrato_id=" . $id);
                 $resultado = $this->delete(self::tabla, array("id" => $id));
                 $this->exec_query("commit");
+                $this->log("Contrato $id borrado.");
                 return $resultado;
             } catch (Exception $exc) {
                 $this->exec_query("rollback");
@@ -85,22 +88,19 @@ class contrato extends db implements crud {
 
     public function emitirContrato($data, $producto, $cantidad, $costo, $medio_pago) {
         $resultado = array("suceed" => false);
-        $bitacora = new bitacora();
-        try { 
+        try {
             $this->exec_query("start transaction");
             $resultado['registrar_contrato'] = $this->insertar($data);
             // registramos ahora los productos
             if ($resultado['registrar_contrato']['insert_id'] > 0) {
 
                 $contrato_id = $resultado['registrar_contrato']['insert_id'];
-                var_dump($producto);
-                var_dump($cantidad);
                 if (is_array($producto) && is_array($cantidad)) {
                     $monto = 0;
                     for ($i = 0; $i < sizeof($producto); $i++) {
                         while ($cantidad[$i] > 0) {
                             $producto_almacen = $this->actualizarProductoAlmacen($producto[$i], $cantidad[$i]);
-                            
+
                             $resultado['contrato_productos'] = $this->insert(
                                     "contrato_productos", Array(
                                 "contrato_id" => $contrato_id,
@@ -112,17 +112,14 @@ class contrato extends db implements crud {
                             $monto += ($costo[$i] * $cantidad[$i]);
                         }
                     }
-                    
                 }
-                
-                // registramos ahora los recibos
+
                 $plazos = new plazo();
                 $plazo = $plazos->ver($data['plazo_id']);
 
                 $res = $this->generarRecibos($data['cliente_id'], $contrato_id, $data['frecuencia_id'], $plazo['data'][0]['nombre']);
                 $monto_recibo = $monto / $res;
-                $this->exec_query("update recibo set monto=" . $monto_recibo . 
-                        ", medio_pago_id=".$medio_pago." where contrato_id=" . $contrato_id);
+                $this->update("recibo", array("monto" => $monto_recibo, "medio_pago_id" => $medio_pago), array("contrato_id" => $contrato_id));
                 $comision = $monto * ($data['porcentaje_vendedor'] / 100);
 
                 $this->exec_query("update contrato join configuracion set contrato.monto=" . $monto . ", 
@@ -131,11 +128,10 @@ class contrato extends db implements crud {
             }
             $resultado['suceed'] = true;
             $this->exec_query("commit");
-            $bitacora->log($_SESSION['usuario'], "Emision contrato. OK!");
+            $this->log("Emision contrato. id {$resultado['registrar_contrato']['insert_id']}");
             return $resultado;
         } catch (Exception $exc) {
             $this->exec_query("rollback");
-            $bitacora->log($_SESSION['usuario'], "Emision contrato. Fallido");
             trigger_error("Error al emitir el contrato" . $exc->getTraceAsString());
             return $resultado;
         }
