@@ -11,7 +11,9 @@ class mediopago extends db implements crud {
     const tipo_medio_pago = "tipo_medio_pago";
 
     public function actualizar($id, $data) {
-        return $this->update(self::tabla, $data, array("id" => $id));
+        $result=$this->update(self::tabla, $data, array("id" => $id));
+        $this->log("Medio de pago $id actualizado ");
+        return $result;
     }
 
     public function borrar($id) {
@@ -19,11 +21,15 @@ class mediopago extends db implements crud {
         if (count($recibos_asociados['data']) > 0) {
             return array("suceed" => false, "error" => "No se puede borrar el medio de pago porque tiene recibos asociados a este.");
         }
-        return $this->delete(self::tabla, array("id" => $id));
+        $result= $this->delete(self::tabla, array("id" => $id));
+        $this->log("Medio de pago $id borrado");
+        return $result;
     }
 
     public function insertar($data) {
-        return $this->insert(self::tabla, $data);
+        $result=$this->insert(self::tabla, $data);
+        $this->log("Medio de pago {$result['insert_id']} agregado.");
+        return $result;
     }
 
     public function listar() {

@@ -11,25 +11,30 @@ class almacen extends db implements crud {
     const tabla_producto_almacen = "producto_almacen";
 
     public function actualizar($id, $data) {
-        return $this->update(self::tabla, $data, array("id" => $id));
+        $result = $this->update(self::tabla, $data, array("id" => $id));
+        $this->log("Almacen {$data['id']}:{$data['nombre']} actualizado con exito.");
+        return $result;
     }
 
     public function borrar($id) {
         $productos_almacen = $this->dame_query("select * from  producto_almacen where almacen_id =" . $id);
         if (count($productos_almacen['data']) > 0) {
-//            var_dump($productos_almacen);
             foreach ($productos_almacen['data'] as $producto) {
-                var_dump($producto);
                 if ($producto['cantidad'] > 0) {
                     return array("suceed" => false, "error" => "No se puede borrar el almacen porque tiene productos asociados con existencia.");
                 }
             }
         }
-        return $this->delete(self::tabla, array("id" => $id));
+        $temp = $this->ver($id);
+        $this->log("Almacen {$temp['id']}:{$temp['nombre']} borrado con exito");
+        $result = $this->delete(self::tabla, array("id" => $id));
+        return $result;
     }
 
     public function insertar($data) {
-        return $this->insert(self::tabla, $data);
+        $result = $this->insert(self::tabla, $data);
+        $this->log("Almacen {$result['insert_id']}:{$data['nombre']} creado con exito.");
+        return $result;
     }
 
     public function ver($id) {
@@ -81,6 +86,8 @@ on duplicate key update cantidad = cantidad + {$cantidad[$i]};");
                 }
             }
             $this->exec_query("commit");
+            $almacen_temp = $this->ver($almacen);
+            $this->log("Orden de compra realizada para almacen {$almacen_temp['id']}:{$almacen_temp['nombre']}.");
             return $resultado;
         } catch (Exception $exc) {
             $this->exec_query("rollback");
@@ -99,7 +106,6 @@ on duplicate key update cantidad = cantidad + {$cantidad[$i]};");
         $resultado = array("suceed" => false);
         // <editor-fold defaultstate="collapsed" desc="Distintos productos/distintos almacenes">
         if (is_array($almacen_destino) && is_array($producto)) {
-
             for ($i = 0; $i < sizeof($producto); $i++) {
                 $this->traspaso($producto[$i], $almacen_origen, $almacen_destino[$i], $cantidad[$i]);
             }
@@ -115,6 +121,9 @@ on duplicate key update cantidad = cantidad + {$cantidad[$i]};");
         // <editor-fold defaultstate="collapsed" desc="un producto/un almacen">
         else {
             $resultado = $this->traspaso($producto, $almacen_origen, $almacen_destino, $cantidad);
+            $temp_almacen_origen = $this->ver($almacen_origen);
+            $temp_almacen_destino = $this->ver($almacen_destino);
+            $this->log("Traspaso realizado desde almacen {$temp_almacen_origen['id']}:{$temp_almacen_origen['nombre']} a {$temp_almacen_destino['id']}:{$temp_almacen_destino['id']}:{$temp_almacen_destino['nombre']} ");
             return $resultado;
         }
         // </editor-fold>
@@ -161,6 +170,7 @@ on duplicate key update cantidad = cantidad + $cantidad;");
                         where ifnull(producto_almacen.cantidad, 0) < producto.cantidad_minima
                             order by producto.id");
     }
+
 
 }
 

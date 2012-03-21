@@ -384,6 +384,11 @@ Class db {
         return $a->dame_query($consulta);
     }
 
+    public function log($mensaje) {
+        $bitacora = new bitacora();
+        return $bitacora->log($mensaje);
+    }
+
 }
 
 /**
@@ -680,7 +685,7 @@ Class Misc {
         if (count($params) > 0) {
             foreach ($params as $param) {
                 /* si no encuentro el campo ni la direccion en la url */
-                if (stristr($param, "order") === false&&stristr($param, $campo) === false && stristr($param, $direccion) === false) {
+                if (stristr($param, "order") === false && stristr($param, $campo) === false && stristr($param, $direccion) === false) {
                     array_push($newParams, $param);
                 }
             }

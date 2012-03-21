@@ -10,5 +10,6 @@ interface crud {
     function borrar($id);
     function actualizar($id, $data);
     function listar();
+    function log($mensaje);
 }
 

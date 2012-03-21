@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Description of frecuencia
  *
@@ -9,15 +10,22 @@ class frecuencia extends db implements crud {
     const tabla = "frecuencia";
 
     public function actualizar($id, $data) {
-        return $this->update(self::tabla, $data, array("id" => $id));
+        $result = $this->update(self::tabla, $data, array("id" => $id));
+        $this->log("Frecuencia $id:{$data['nombre']} actualizada");
+        return $result;
     }
 
     public function borrar($id) {
-        return $this->delete(self::tabla, array("id" => $id));
+        $temp = $this->ver($id);
+        $result = $this->delete(self::tabla, array("id" => $id));
+        $this->log("Frecuencia $id:{$temp['nombre']} borrada.");
+        return $result;
     }
 
     public function insertar($data) {
-        return $this->insert(self::tabla, $data);
+        $result = $this->insert(self::tabla, $data);
+        $this->log("Frecuencia {$result['insert_id']}:{$data['nombre']} creada.");
+        return $result;
     }
 
     public function listar() {
