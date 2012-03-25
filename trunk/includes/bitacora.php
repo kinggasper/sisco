@@ -40,7 +40,7 @@ class bitacora extends db implements crud {
     }
 
     public function log($mensaje) {
-        return $this->insertar_log($_SESSION['usuario']['id'], $mensaje);
+        return $this->insertar_log(isset($_SESSION['usuario']['id']) ? $_SESSION['usuario']['id'] : 0, $mensaje);
     }
 
 }
