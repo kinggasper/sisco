@@ -23,7 +23,7 @@ on duplicate key update tipo_usuario_id = {$tipo_usuario};");
     public function actualizar($id, $data) {
         $result = $this->update(self::tabla, $data, array("id" => $id));
         $this->log("Usuario $id:{$data['Nombre']} actualizado.");
-        return $result; 
+        return $result;
     }
 
     public function borrar($id) {
@@ -108,8 +108,10 @@ on duplicate key update tipo_usuario_id = {$tipo_usuario};");
      */
     public function confirmar_miembro() {
         session_start();
-        if (!isset($_SESSION['status']) || $_SESSION['status'] != 'logueado' || !isset($_SESSION['usuario']))
+        if (!isset($_SESSION['status']) || $_SESSION['status'] != 'logueado' || !isset($_SESSION['usuario'])) {
+            session_destroy();
             header("location:" . ROOT . "/login.php");
+        }
     }
 
     /**

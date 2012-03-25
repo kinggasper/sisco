@@ -24,7 +24,7 @@ class vendedor extends db implements crud {
 
     public function insertar($data) {
         $result = $this->insert(self::tabla, $data);
-        $this->log("Vendedor {$data['Nombre']} creado ");
+        $this->log("Vendedor {$data['nombre']} creado ");
         return $result;
     }
 
