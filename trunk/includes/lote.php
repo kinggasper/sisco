@@ -26,9 +26,11 @@ class lote extends db implements crud {
     }
 
     public function insertar($data) {
+        
         $result = $this->insert(self::tabla, $data);
-        $this->log("Lote Creado");
+        //$this->log("Lote Creado");
         return $result;
+        
     }
 
     public function listar() {
@@ -62,11 +64,16 @@ class lote extends db implements crud {
             case self::banco:
                 if ($tipo_cobro == self::pendiente) {
                     // <editor-fold defaultstate="collapsed" desc="Query Banco">
-                    $query = "select * from recibo 
-                inner join contrato on contrato.id = recibo.contrato_id
-                inner join medio_pago on recibo.medio_pago_id = medio_pago.id
-                inner join tipo_medio_pago on medio_pago.tipo_medio_pago_id = tipo_medio_pago.id
-                inner join banco on medio_pago.banco_id = banco.id
+                    $query = "select cliente.cedula, cliente.nacionalidad, cliente.id,
+                    medio_pago.numero_cuenta, recibo.monto, cliente.email,
+                    empresa.rif
+                    from recibo 
+                    inner join contrato on contrato.id = recibo.contrato_id 
+                    inner join medio_pago on recibo.medio_pago_id = medio_pago.id 
+                    inner join tipo_medio_pago on medio_pago.tipo_medio_pago_id = tipo_medio_pago.id 
+                    inner join cliente on recibo.cliente_id = cliente.id
+                    inner join banco on medio_pago.banco_id = banco.id
+                    inner join empresa on contrato.empresa_id = empresa.id
                     where contrato.status_contrato_id=1 and status_recibo_id = 1 
                     and tipo_medio_pago.id = $tipo_medio_pago
                     and banco.id = $banco
@@ -80,9 +87,9 @@ class lote extends db implements crud {
                 die("Peticion invalida");
                 break;
         }
+        
         // </editor-fold>
-
-        $recibos = $recibo->dame_query($query);
+        $recibos['detalle'] = $recibo->dame_query($query);
         // <editor-fold defaultstate="collapsed" desc="inserto lote en bd">
         $result_lote = $this->insertar(array(
             "usuario_id" => $session['id'],
@@ -91,7 +98,8 @@ class lote extends db implements crud {
         if ($result_lote['suceed'] == true && $result_lote['insert_id'] > 0) {
             // <editor-fold defaultstate="collapsed" desc="detalle lote">
             $result_lote_detalle = array();
-            foreach ($recibos['data'] as $recibo) {
+            $recibos['lote'] = $result_lote;
+            foreach ($recibos['detalle']['data'] as $recibo) {
                 $result_lote_detalle = $this->insert('lote_detalle', array(
                     "lote_id" => $result_lote['insert_id'],
                     "recibo_id" => $recibo['id']));
@@ -100,7 +108,7 @@ class lote extends db implements crud {
         }
         // </editor-fold>
         // <editor-fold defaultstate="collapsed" desc="bitacora">
-        $this->log("Lote generadso");
+        //$this->log("Lote generado");
         // </editor-fold>
         return $recibos;
     }
