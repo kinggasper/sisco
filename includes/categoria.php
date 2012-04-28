@@ -23,7 +23,7 @@ class categoria extends db implements crud {
 
     public function insertar($data) {
         $result=$this->insert(self::tabla, $data);
-        $this->log("Categoria {$result['id']}:{$data['nombre']} creada.");
+        $this->log("Categoria {$result['insert_id']}:{$data['nombre']} creada.");
         return $result; 
     }
 

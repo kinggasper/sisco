@@ -97,6 +97,13 @@ $usuario->confirmar_miembro();
                         <a href="../banco/listar.php" class="btn small info">Entrar</a>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="span4">
+                        <h3>Categoria</h3>
+                        <p>Administrar categorias de productos</p>
+                        <a href="../categoria/listar.php" class="btn small info">Entrar</a>
+                    </div>
+                </div>
             </div>
             <footer>
                 <p>&copy; Aled Multimedia Solutions <?php echo date("Y"); ?></p>
