@@ -18,7 +18,6 @@ if (isset($_POST['enviar'])) {
         header('Pragma: public');
         $rif = str_replace("-","",$recibos['detalle']['data'][0]['rif']);
         $rif = str_pad($rif,10,'0',STR_PAD_RIGHT);
-        //echo '01'.$rif.'0000000001000009999990021/04/201200000000010000000000000000000100000000000000000010000000000000000000101/01/201221/04/2012'.PHP_EOL;
         $i = 0;
         $total = 0;
         
@@ -30,6 +29,7 @@ if (isset($_POST['enviar'])) {
             $i++;
         }
         $total = str_replace(",", "", $total);
+        
         echo '01'.$rif.str_pad($i,10,'0',STR_PAD_LEFT).str_pad($total,13,'0',STR_PAD_LEFT);
         echo date('d/m/Y').str_pad($recibos['lote']['insert_id'],10,'0',STR_PAD_LEFT);
         echo str_pad('0',60,'0',STR_PAD_LEFT).date('d/m/Y').date('d/m/Y').PHP_EOL.PHP_EOL;
