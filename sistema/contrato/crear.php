@@ -135,6 +135,13 @@ if (isset($_POST['submit'])) {
                         $("#productos tbody").append(tr);
                         $("#sel_producto option:selected").remove();
                         $("#numero_productos").html($("#productos tbody tr").length);
+                        var monto = 0;
+                        var total = 0;
+                        $("input[name='costo[]']").each(function(){
+                            monto = $(this).closest("tr").find("input[name='cantidad[]']").val() * $(this).val();
+                            total += monto; 
+                        });
+                        $("#total_contrato").html(total);
                     }
                 });
                 $("#registrar").click(function(){
@@ -350,8 +357,11 @@ if (isset($_POST['submit'])) {
                                                     <tr>
                                                         <td colspan="4" align="right">
                                                             <div class="clearfix">
+                                                                <div>
                                                                 <span>Cantidad Productos: </span>
-                                                                <span id="numero_productos">0</span>
+                                                                <span id="numero_productos">0</span></div>
+                                                                <div><span style="font-weight: bold">Total Contrato Bs.: </span>
+                                                                <span id="total_contrato" style="text-decoration: underline">0</span></div>
                                                                 <input id="valor" type="hidden" name="valor" value=""/>
                                                             </div>
                                                         </td>
@@ -402,7 +412,7 @@ if (isset($_POST['submit'])) {
                                                         <label for="costo">Costo:</label>
                                                         <div class="input">
                                                             <div class="input-append">
-                                                                <input type="text" name="costo" id="costo" class="required number small" readonly="readonly" value="0"/>
+                                                                <input type="text" name="costo" id="costo" class="required number small" value="0"/>
                                                                 <span class="add-on">Bsf.</span>
                                                             </div>
                                                         </div>
@@ -472,8 +482,7 @@ if (isset($_POST['submit'])) {
                                                     <div class="clearfix">
                                                         <div class="input">
                                                             <input type="button" name="registrar" id="registrar" value="Registrar" class="btn primary"/>
-                                                            <a class="btn" href="#" data-dismiss="modal">Cerrar</a>
-                                                                    
+                                                            <a class="btn" href="#" data-dismiss="modal">Cerrar</a>                                                                    
                                                         </div>
                                                     </div>
                                                 </fieldset>
