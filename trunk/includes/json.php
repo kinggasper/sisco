@@ -33,6 +33,10 @@ switch ($_GET['accion']) {
         $medio_pago = new mediopago();
         $result = $medio_pago->medios_pago_usuario($_GET['cliente']);
         break;
+    case 'calcular_numero_cuotas':
+        $contrato = new contrato();
+        $result = $contrato->obtenerNumeroDeCuotas($_GET['frecuencia_id'], $_GET['plazo_id']);
+        break;
     default:
         $result = array("suceed" => false, "error" => "No ha seleccionado ninguna acción");
         break;

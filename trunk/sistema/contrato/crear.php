@@ -22,6 +22,7 @@ $tipo_medio_pago = $medio_pago->listar_tipo_medio_pagos();
 $bancos = $banco -> listar();
 $plazos = $plazo->listar();
 $resultado = array("suceed" => false);
+$cuotas = $frecuencias['data'][0]['frecuencia'] * $plazos['data'][0]['nombre'];
 if (isset($_POST['submit'])) {
     $data = $_POST;
     unset($data['submit']);
@@ -33,7 +34,8 @@ if (isset($_POST['submit'])) {
     unset($data['producto']);
     unset($data['cantidad']);
     unset($data['medio_pago_id']);
-    $resultado = $contrato->emitirContrato($data, $_POST['producto'], $_POST['cantidad'],$_POST['costo'],$_POST['medio_pago_id']);
+    unset($data['fecha_inicio_cobro']);
+    $resultado = $contrato->emitirContrato($data, $_POST['producto'], $_POST['cantidad'],$_POST['costo'],$_POST['medio_pago_id'],$_POST['fecha_inicio_cobro']);
     //$resultado = $contrato->emitirContrato($contrato,$detalle);
 }
 // </editor-fold>
@@ -59,8 +61,10 @@ if (isset($_POST['submit'])) {
         <script src="<?php echo ROOT; ?>/js/jquery-validate/localization/messages_es.js"></script>
         <script src="<?php echo ROOT; ?>/js/bootstrap-modal.js"></script>
         <script src="<?php echo ROOT; ?>/js/forms.js"></script>
+        <script src="<?php echo ROOT; ?>/js/jquery.ui.datepicker-es.js"></script>
         <script>
             $(document).ready(function() {
+                $( "#datepicker" ).datepicker({});
                 $("#agregar_productos").validate();
                 $("#registrarMedioPago").validate();
                 $('a[href|=#registrarMedioPago]').click(function() {
@@ -119,6 +123,15 @@ if (isset($_POST['submit'])) {
                             }
                         }
                     })
+                });
+                $("#plazo_id, #frecuencia_id").change(function(){
+                    $.getJSON('<?php echo ROOT; ?>/includes/json.php', 
+                    {accion: 'calcular_numero_cuotas',frecuencia_id:$("#frecuencia_id").val(), 
+                        plazo_id:$("#plazo_id").val()}, 
+                        function(data){
+                            $("#cuotas").val(data);
+                        });
+                    
                 });
                 $("#tabs").tabs();
                 $("#agregar").click(function(){
@@ -283,6 +296,18 @@ if (isset($_POST['submit'])) {
                                                             <option value="<?php echo $valor['id']; ?>"><?php echo $valor['nombre'] ?></option>
                                                         <?php endforeach; ?>
                                                     </select>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix">
+                                                <label for="cuotas">Nº de Cuotas:<sup>*</sup></label>
+                                                <div class="input">
+                                                    <input class="required number small" type="text" name="cuotas" id="cuotas" value="<?php echo $cuotas ?>"/>
+                                                </div>
+                                            </div>
+                                            <div class="clearfix">
+                                                <label for="datepicker">Fecha Inicio Cobros:<sup>*</sup></label>
+                                                <div class="input">
+                                                    <input class="small" type="text" name="fecha_inicio_cobro" id="datepicker" value="<?php echo date('d/m/Y'); ?>"/>
                                                 </div>
                                             </div>
                                         </fieldset>
