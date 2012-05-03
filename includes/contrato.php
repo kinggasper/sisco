@@ -85,8 +85,18 @@ class contrato extends db implements crud {
             inner join categoria on producto.categoria_id = categoria.id
             where contrato_productos.contrato_id = $id");
     }
-
-    public function emitirContrato($data, $producto, $cantidad, $costo, $medio_pago) {
+    public function obtenerNumeroDeCuotas($frecuencia_id, $plazo_id) {
+        $resultado = 0;
+        $frecuencias = new frecuencia();
+        $plazos = new plazo();
+        $fre = $frecuencias->ver($frecuencia_id);
+        $pla = $plazos->ver($plazo_id);
+        if ($fre['suceed'] && $pla['suceed']) {
+            $resultado = $fre['data'][0]['frecuencia'] * $pla['data'][0]['nombre'];
+        }
+        return $resultado;
+    }
+    public function emitirContrato($data, $producto, $cantidad, $costo, $medio_pago, $fecha_inicio_cobro) {
         $resultado = array("suceed" => false);
         try {
             $this->exec_query("start transaction");
@@ -114,12 +124,22 @@ class contrato extends db implements crud {
                     }
                 }
 
-                $plazos = new plazo();
-                $plazo = $plazos->ver($data['plazo_id']);
+                //$plazos = new plazo();
+                //$plazo = $plazos->ver($data['plazo_id']);
 
-                $res = $this->generarRecibos($data['cliente_id'], $contrato_id, $data['frecuencia_id'], $plazo['data'][0]['nombre']);
-                $monto_recibo = $monto / $res;
-                $this->update("recibo", array("monto" => $monto_recibo, "medio_pago_id" => $medio_pago), array("contrato_id" => $contrato_id));
+                //$res = $this->generarRecibos($data['cliente_id'], $contrato_id, $data['frecuencia_id'], $plazo['data'][0]['nombre']);
+                //$monto_recibo = $monto / $res;
+                //$this->update("recibo", array("monto" => $monto_recibo, "medio_pago_id" => $medio_pago), array("contrato_id" => $contrato_id));
+                $res = $this->generarRecibosCuotasFijas($data['cliente_id'], $contrato_id, 
+                        $data['frecuencia_id'], 
+                        $fecha_inicio_cobro, 
+                        $cuotas, 
+                        $monto,
+                        $medio_pago);
+                
+                if ($res['suceed']) {
+                    // escribimos en la bitacora
+                }
                 $comision = $monto * ($data['porcentaje_vendedor'] / 100);
 
                 $this->exec_query("update contrato join configuracion set contrato.monto=" . $monto . ", 
@@ -185,6 +205,48 @@ class contrato extends db implements crud {
         return $resultado;
     }
 
+// <editor-fold defaultstate="collapsed" desc="genera recibos pasando numero de cuotas">
+    function generarRecibosCuotasFijas($cliente_id, $contrato_id, $frecuencia_id, $fecha_cobro, $cuotas, $monto, $medio_pago) {
+        $monto = $monto / $cuotas;
+        
+        for ($i = 0; $i < $cuotas; $i++) {
+            $resultado = $this->insert("recibo", Array(
+                "cliente_id" => $cliente_id,
+                "contrato_id" => $contrato_id,
+                "monto" => $monto,
+                "fecha" => date('Y-m-d 00:00:00', $fecha_cobro),
+                "status_recibo_id" => 1,
+                "medio_pago_id" => $medio_pago
+                    ));
+            switch ($frecuencia_id) {
+                // semanal
+                case 2:
+                    $fecha_cobro = strtotime("+1 week", $fecha_cobro);
+                    break;
+                // quincenal
+                case 3:
+                case 4:
+                    $q1 = $frecuencia_id == 3 ? '10' : '15';
+                    $q2 = $frecuencia_id == 3 ? '25' : 't';
+                    if (date("d", $fecha_cobro) != 10) {
+                        $fecha_cobro = strtotime(date($q1 . '-m-Y', $fecha_cobro));
+                        if ($i > 0)
+                            $fecha_cobro = strtotime("+1 month", $fecha_cobro);
+                    } else {
+                        $fecha_cobro = strtotime(date($q2 . '-m-Y', $fecha_cobro));
+                    }
+                    break;
+                //mensual
+                default:
+                    $fecha_cobro = strtotime("+1 month", $fecha_cobro);
+                    break;
+            }
+        }
+
+        return $resultado;
+    }
+    
+    // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Recibos Semanales">
     function recibosSemanales($cliente_id, $contrato_id, $plazo) {
         $n = 0;
