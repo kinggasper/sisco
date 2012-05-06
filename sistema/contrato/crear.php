@@ -19,7 +19,7 @@ $organismos = $organismo->listar();
 $frecuencias = $frecuencia->listar();
 $productos = $producto->productosConExistencia();
 $tipo_medio_pago = $medio_pago->listar_tipo_medio_pagos();
-$bancos = $banco -> listar();
+$bancos = $banco->listar();
 $plazos = $plazo->listar();
 $resultado = array("suceed" => false);
 $cuotas = $frecuencias['data'][0]['frecuencia'] * $plazos['data'][0]['nombre'];
@@ -35,7 +35,7 @@ if (isset($_POST['submit'])) {
     unset($data['cantidad']);
     unset($data['medio_pago_id']);
     unset($data['fecha_inicio_cobro']);
-    $resultado = $contrato->emitirContrato($data, $_POST['producto'], $_POST['cantidad'],$_POST['costo'],$_POST['medio_pago_id'],$_POST['fecha_inicio_cobro']);
+    $resultado = $contrato->emitirContrato($data, $_POST['producto'], $_POST['cantidad'], $_POST['costo'], $_POST['medio_pago_id'], $_POST['cuotas'], $_POST['fecha_inicio_cobro']);
     //$resultado = $contrato->emitirContrato($contrato,$detalle);
 }
 // </editor-fold>
@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
                 $("#registrarMedioPago").validate();
                 $('a[href|=#registrarMedioPago]').click(function() {
                     if (!$("#cliente_id").valid()) {
-                    return false;
+                        return false;
                     }
                 });
                 $("#medio_pago_id").rules("add",{
@@ -79,8 +79,8 @@ if (isset($_POST['submit'])) {
                         required:"Falta medio de pago.",
                         min:"Especifique el medio de pago."
                     }
-                 });
-                 $("#tipo_medio_pago_id").change(function() {
+                });
+                $("#tipo_medio_pago_id").change(function() {
                     
                     if($(this).val()=="1"){
                         $("#banco_id").removeClass("required");
@@ -91,23 +91,23 @@ if (isset($_POST['submit'])) {
                         $("#numero_cuenta").addClass("required");
                         $("#datosBanco").show();
                     }
-                 });
-                 $("#cliente_id").change(function(){
+                });
+                $("#cliente_id").change(function(){
                     $("#usuario_id").attr('value',$(this).val());
                     $.getJSON('<?php echo ROOT; ?>/includes/json.php', {accion: 'listar_medio_pago',cliente:$(this).val()}, 
-                        function(data){
-                            if(data.suceed) {
-                                $("#medio_pago_id option").remove();
-                                $("<option value=\"\">&nbsp;</option>").appendTo("#medio_pago_id");
-                                for(var elemento in data.data){
-                                    if( typeof data.data[elemento] == "object"){
-                                        $("<option value='"+ data.data[elemento].id + "'>"+ data.data[elemento].medio_pago  +"</option>")
-                                        .appendTo("#medio_pago_id");
-                                    }
+                    function(data){
+                        if(data.suceed) {
+                            $("#medio_pago_id option").remove();
+                            $("<option value=\"\">&nbsp;</option>").appendTo("#medio_pago_id");
+                            for(var elemento in data.data){
+                                if( typeof data.data[elemento] == "object"){
+                                    $("<option value='"+ data.data[elemento].id + "'>"+ data.data[elemento].medio_pago  +"</option>")
+                                    .appendTo("#medio_pago_id");
                                 }
                             }
-                        });
-                 });
+                        }
+                    });
+                });
                 $("#organismo_id").change(function(){
                     $.getJSON('<?php echo ROOT; ?>/includes/json.php', {accion:'clientes_organismo', organismo:$(this).val()}, function(data){
                         $("#cliente_id option").remove();
@@ -126,11 +126,12 @@ if (isset($_POST['submit'])) {
                 });
                 $("#plazo_id, #frecuencia_id").change(function(){
                     $.getJSON('<?php echo ROOT; ?>/includes/json.php', 
-                    {accion: 'calcular_numero_cuotas',frecuencia_id:$("#frecuencia_id").val(), 
+                    {accion: 'calcular_numero_cuotas',
+                        frecuencia_id:$("#frecuencia_id").val(), 
                         plazo_id:$("#plazo_id").val()}, 
-                        function(data){
-                            $("#cuotas").val(data);
-                        });
+                    function(data){
+                        $("#cuotas").val(data);
+                    });
                     
                 });
                 $("#tabs").tabs();
@@ -161,10 +162,10 @@ if (isset($_POST['submit'])) {
                     if($("#medio_pago").valid()){
                         $.getJSON('<?php echo ROOT; ?>/includes/json.php', 
                         {accion:'agregar_medio_pago',
-                         tipo_medio_pago_id:$('#tipo_medio_pago_id').val(),
-                         banco_id:$("#banco_id").val(),
-                         numero_cuenta:$("#numero_cuenta").val(),
-                         usuario_id:$("#usuario_id").val()
+                            tipo_medio_pago_id:$('#tipo_medio_pago_id').val(),
+                            banco_id:$("#banco_id").val(),
+                            numero_cuenta:$("#numero_cuenta").val(),
+                            usuario_id:$("#usuario_id").val()
                         }, 
                         function(data){
                             if (data.suceed) {
@@ -172,16 +173,16 @@ if (isset($_POST['submit'])) {
                                     accion:'listar_medio_pago',
                                     cliente:$("#usuario_id").val()},
                                 function(data){
-                                   if (data.suceed) {
-                                       $("#medio_pago_id option").remove();
-                                       for(var elemento in data.data){
+                                    if (data.suceed) {
+                                        $("#medio_pago_id option").remove();
+                                        for(var elemento in data.data){
                                             if( typeof data.data[elemento] == "object"){
                                                 $("<option value='"+ data.data[elemento].id + "'>"+ data.data[elemento].medio_pago +"</option>")
                                                 .appendTo("#medio_pago_id");
                                             }
                                         }
-                                   }
-                                   $("#registrarMedioPago").modal('toggle');
+                                    }
+                                    $("#registrarMedioPago").modal('toggle');
                                 });
                             } else {
                                 alert(data.stats.error);
@@ -211,12 +212,12 @@ if (isset($_POST['submit'])) {
                     }
                 });
                 $("#cantidad").rules("add", {
-                   max:function() {
-                       return ($("#disponible").val());
-                   },
-                   messages:{
-                       max:"Cantidad mayor a lo disponible."
-                   }
+                    max:function() {
+                        return ($("#disponible").val());
+                    },
+                    messages:{
+                        max:"Cantidad mayor a lo disponible."
+                    }
                 });
                 $(document).on("click",".danger",function(){
                     if(confirm("Realmente desea borrar este registro?"))
@@ -345,7 +346,7 @@ if (isset($_POST['submit'])) {
                                                     </select>
                                                     <input type="hidden" value="<?php echo $vendedores['data'][0]['comision'] ?>" name="porcentaje_vendedor"/>
                                                 </div>
-                                                
+
                                             </div>
                                         </fieldset>
                                         <fieldset>
@@ -354,20 +355,20 @@ if (isset($_POST['submit'])) {
                                                 <label for="medio_pago_id">Medio de Pago:<sup>*</sup></label>
                                                 <div class="input">
                                                     <select name="medio_pago_id" class="required" id="medio_pago_id">
-                                                    <option value="0">Seleccione un cliente</option>
+                                                        <option value="0">Seleccione un cliente</option>
                                                     </select>
                                                     <br />
                                                     <p><a class="btn info" data-toggle="modal" href="#registrarMedioPago">Agregar Medio de Pago</a> </p>
                                                 </div>
-                                                
+
                                             </div>
                                         </fieldset>
                                     </div>
                                     <div id="fragment-2">
-                                        
+
                                         <div>
                                             <p>
-                                            <a class="btn info" data-toggle="modal" href="#myModal" >Agregar Productos</a>
+                                                <a class="btn info" data-toggle="modal" href="#myModal" >Agregar Productos</a>
                                             </p>
                                             <table class="bordered-table zebra-striped" id="productos">
                                                 <thead>
@@ -383,10 +384,10 @@ if (isset($_POST['submit'])) {
                                                         <td colspan="4" align="right">
                                                             <div class="clearfix">
                                                                 <div>
-                                                                <span>Cantidad Productos: </span>
-                                                                <span id="numero_productos">0</span></div>
+                                                                    <span>Cantidad Productos: </span>
+                                                                    <span id="numero_productos">0</span></div>
                                                                 <div><span style="font-weight: bold">Total Contrato Bs.: </span>
-                                                                <span id="total_contrato" style="text-decoration: underline">0</span></div>
+                                                                    <span id="total_contrato" style="text-decoration: underline">0</span></div>
                                                                 <input id="valor" type="hidden" name="valor" value=""/>
                                                             </div>
                                                         </td>
@@ -410,77 +411,77 @@ if (isset($_POST['submit'])) {
                                     <a class="close" data-dismiss="modal">x</a>
                                     <h3>Productos disponibles</h3>
                                 </div>
-                                    <form id="agregar_productos" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                                        <div class="row">
-                                            <div class="span16">
-                                                <fieldset>
-                                                    <div class="clearfix">
-                                                        <label for="sel_producto">Producto:</label>
-                                                        <div class="input">
-                                                            <select name="sel_producto" class="required" id="sel_producto">
-                                                                <option value="">Seleccione un producto</option>
-                                                                <?php foreach ($productos['data'] as $dato): ?>
-                                                                    <option value="<?php echo $dato['id']; ?>"><?php echo $dato['nombre']; ?></option>
-                                                                <?php endforeach; ?>
-                                                            </select>
+                                <form id="agregar_productos" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                                    <div class="row">
+                                        <div class="span16">
+                                            <fieldset>
+                                                <div class="clearfix">
+                                                    <label for="sel_producto">Producto:</label>
+                                                    <div class="input">
+                                                        <select name="sel_producto" class="required" id="sel_producto">
+                                                            <option value="">Seleccione un producto</option>
+                                                            <?php foreach ($productos['data'] as $dato): ?>
+                                                                <option value="<?php echo $dato['id']; ?>"><?php echo $dato['nombre']; ?></option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix">
+                                                    <label for="disponible">Disponible:</label>
+                                                    <div class="input">
+                                                        <div class="input-append">
+                                                            <input type="text" name="disponible" id="disponible" class="required number small" readonly="readonly" value="0"/>
                                                         </div>
                                                     </div>
-                                                    <div class="clearfix">
-                                                        <label for="disponible">Disponible:</label>
-                                                        <div class="input">
-                                                            <div class="input-append">
-                                                                <input type="text" name="disponible" id="disponible" class="required number small" readonly="readonly" value="0"/>
-                                                            </div>
+                                                </div>
+                                                <div class="clearfix">
+                                                    <label for="costo">Costo:</label>
+                                                    <div class="input">
+                                                        <div class="input-append">
+                                                            <input type="text" name="costo" id="costo" class="required number small" value="0"/>
+                                                            <span class="add-on">Bsf.</span>
                                                         </div>
                                                     </div>
-                                                    <div class="clearfix">
-                                                        <label for="costo">Costo:</label>
-                                                        <div class="input">
-                                                            <div class="input-append">
-                                                                <input type="text" name="costo" id="costo" class="required number small" value="0"/>
-                                                                <span class="add-on">Bsf.</span>
-                                                            </div>
-                                                        </div>
+                                                </div>
+                                                <div class="clearfix">
+                                                    <label for="cantidad">Cantidad:</label>
+                                                    <div class="input">
+                                                        <input type="text" name="cantidad" id="cantidad" placeholder="0" class="mini required" />
                                                     </div>
-                                                    <div class="clearfix">
-                                                        <label for="cantidad">Cantidad:</label>
-                                                        <div class="input">
-                                                            <input type="text" name="cantidad" id="cantidad" placeholder="0" class="mini required" />
-                                                        </div>
+                                                </div>
+                                                <div class="clearfix">
+                                                    <div class="input">
+                                                        <input type="button" name="agregar" id="agregar" name="agregar" value="Agregar Producto" class="btn primary"/>
+                                                        <a class="btn" href="#" data-dismiss="modal">Cerrar</a>
+
                                                     </div>
-                                                    <div class="clearfix">
-                                                        <div class="input">
-                                                            <input type="button" name="agregar" id="agregar" name="agregar" value="Agregar Producto" class="btn primary"/>
-                                                            <a class="btn" href="#" data-dismiss="modal">Cerrar</a>
-                                                            
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                            </div>
+                                                </div>
+                                            </fieldset>
                                         </div>
-                                    </form>
-                                </div>
-                            <div id="registrarMedioPago" class="modal" style="display:none;">
-                                    <div class="modal-header">
-                                        <a class="close" data-dismiss="modal">x</a>
-                                        <h3>Medios de Pago</h3>
                                     </div>
-                                    <form id="medio_pago" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                                        <div class="row">
-                                            <div class="span16">
-                                                <fieldset>
-                                                    <div class="clearfix">
-                                                        <label for="tipo_medio_pago_id">Tipo Medio Pago:</label>
-                                                        <div class="input">
-                                                            <select name="tipo_medio_pago_id" class="required" id="tipo_medio_pago_id">
-                                                                <option value="">Seleccione Tipo</option>
-                                                                <?php foreach ($tipo_medio_pago['data'] as $dato): ?>
-                                                                    <option value="<?php echo $dato['id']; ?>"><?php echo $dato['nombre']; ?></option>
-                                                                <?php endforeach; ?>
-                                                            </select>
-                                                        </div>
+                                </form>
+                            </div>
+                            <div id="registrarMedioPago" class="modal" style="display:none;">
+                                <div class="modal-header">
+                                    <a class="close" data-dismiss="modal">x</a>
+                                    <h3>Medios de Pago</h3>
+                                </div>
+                                <form id="medio_pago" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                                    <div class="row">
+                                        <div class="span16">
+                                            <fieldset>
+                                                <div class="clearfix">
+                                                    <label for="tipo_medio_pago_id">Tipo Medio Pago:</label>
+                                                    <div class="input">
+                                                        <select name="tipo_medio_pago_id" class="required" id="tipo_medio_pago_id">
+                                                            <option value="">Seleccione Tipo</option>
+                                                            <?php foreach ($tipo_medio_pago['data'] as $dato): ?>
+                                                                <option value="<?php echo $dato['id']; ?>"><?php echo $dato['nombre']; ?></option>
+                                                            <?php endforeach; ?>
+                                                        </select>
                                                     </div>
-                                                    <div id="datosBanco">
+                                                </div>
+                                                <div id="datosBanco">
                                                     <div class="clearfix">
                                                         <label for="banco_id">Banco:</label>
                                                         <div class="input">
@@ -488,8 +489,8 @@ if (isset($_POST['submit'])) {
                                                                 <select name="banco_id" class="required" id="banco_id">
                                                                     <option value="">Seleccione Banco</option>
                                                                     <?php foreach ($bancos['data'] as $dato): ?>
-                                                                    <option value="<?php echo $dato['id']; ?>"><?php echo $dato['nombre']; ?></option>
-                                                                <?php endforeach; ?>
+                                                                        <option value="<?php echo $dato['id']; ?>"><?php echo $dato['nombre']; ?></option>
+                                                                    <?php endforeach; ?>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -503,18 +504,18 @@ if (isset($_POST['submit'])) {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div class="clearfix">
+                                                    <div class="input">
+                                                        <input type="button" name="registrar" id="registrar" value="Registrar" class="btn primary"/>
+                                                        <a class="btn" href="#" data-dismiss="modal">Cerrar</a>                                                                    
                                                     </div>
-                                                    <div class="clearfix">
-                                                        <div class="input">
-                                                            <input type="button" name="registrar" id="registrar" value="Registrar" class="btn primary"/>
-                                                            <a class="btn" href="#" data-dismiss="modal">Cerrar</a>                                                                    
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                            </div>
+                                                </div>
+                                            </fieldset>
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 <?php endif; ?>

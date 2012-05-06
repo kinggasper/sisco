@@ -86,6 +86,9 @@ if (isset($_POST['traspasar'])) {
                 <div class="alert-message block-message success">
                     <a class="close" href="#">×</a>
                     <p>Traspaso realizado con <strong>&Eacute;xito.</strong></p>
+                    <pre>
+                        
+                    </pre>
                     <a class="btn small" href="../usuario">Volver al men&uacute;.</a>
                 </div>
             <?php elseif (isset($_GET['producto']) && isset($_GET['almacen']) && is_int($existencia)) : ?>
@@ -131,7 +134,7 @@ if (isset($_POST['traspasar'])) {
                     </form>
                 </div>
             <?php else: ?>
-            <div class="alert-message block-message error">
+                <div class="alert-message block-message error">
                     <a class="close" href="#">×</a>
                     <p>Hubo un error al cargar los datos.</p>
                     <?php if (DEBUG): ?>

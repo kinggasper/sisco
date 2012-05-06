@@ -10,7 +10,7 @@ class contrato extends db implements crud {
     const tabla = "contrato";
 
     public function actualizar($id, $data) {
-        $result= $this->update(self::tabla, $data, array("id" => $id));
+        $result = $this->update(self::tabla, $data, array("id" => $id));
         $this->log("Contrato $id actualizado.");
         return $result;
     }
@@ -85,6 +85,7 @@ class contrato extends db implements crud {
             inner join categoria on producto.categoria_id = categoria.id
             where contrato_productos.contrato_id = $id");
     }
+
     public function obtenerNumeroDeCuotas($frecuencia_id, $plazo_id) {
         $resultado = 0;
         $frecuencias = new frecuencia();
@@ -96,7 +97,8 @@ class contrato extends db implements crud {
         }
         return $resultado;
     }
-    public function emitirContrato($data, $producto, $cantidad, $costo, $medio_pago, $fecha_inicio_cobro) {
+
+    public function emitirContrato($data, $producto, $cantidad, $costo, $medio_pago, $cuotas, $fecha_inicio_cobro) {
         $resultado = array("suceed" => false);
         try {
             $this->exec_query("start transaction");
@@ -126,17 +128,11 @@ class contrato extends db implements crud {
 
                 //$plazos = new plazo();
                 //$plazo = $plazos->ver($data['plazo_id']);
-
                 //$res = $this->generarRecibos($data['cliente_id'], $contrato_id, $data['frecuencia_id'], $plazo['data'][0]['nombre']);
                 //$monto_recibo = $monto / $res;
                 //$this->update("recibo", array("monto" => $monto_recibo, "medio_pago_id" => $medio_pago), array("contrato_id" => $contrato_id));
-                $res = $this->generarRecibosCuotasFijas($data['cliente_id'], $contrato_id, 
-                        $data['frecuencia_id'], 
-                        $fecha_inicio_cobro, 
-                        $cuotas, 
-                        $monto,
-                        $medio_pago);
-                
+                $res = $this->generarRecibosCuotasFijas($data['cliente_id'], $contrato_id, $data['frecuencia_id'], $fecha_inicio_cobro, $cuotas, $monto, $medio_pago);
+
                 if ($res['suceed']) {
                     // escribimos en la bitacora
                 }
@@ -208,7 +204,7 @@ class contrato extends db implements crud {
 // <editor-fold defaultstate="collapsed" desc="genera recibos pasando numero de cuotas">
     function generarRecibosCuotasFijas($cliente_id, $contrato_id, $frecuencia_id, $fecha_cobro, $cuotas, $monto, $medio_pago) {
         $monto = $monto / $cuotas;
-        
+
         for ($i = 0; $i < $cuotas; $i++) {
             $resultado = $this->insert("recibo", Array(
                 "cliente_id" => $cliente_id,
@@ -245,7 +241,7 @@ class contrato extends db implements crud {
 
         return $resultado;
     }
-    
+
     // </editor-fold>
 // <editor-fold defaultstate="collapsed" desc="Recibos Semanales">
     function recibosSemanales($cliente_id, $contrato_id, $plazo) {
