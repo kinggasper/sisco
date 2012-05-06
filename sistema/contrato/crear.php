@@ -5,7 +5,6 @@ $usuario = new usuario();
 $usuario->confirmar_miembro();
 $contrato = new contrato();
 $vendedor = new vendedor();
-//$cliente = new cliente();
 $organismo = new organismo();
 $frecuencia = new frecuencia();
 $producto = new producto();
@@ -13,7 +12,6 @@ $medio_pago = new mediopago();
 $plazo = new plazo();
 $banco = new banco();
 
-//$clientes = $cliente->listar();
 $vendedores = $vendedor->vendedor_por_empresa($_SESSION['usuario']['empresa_id']);
 $organismos = $organismo->listar();
 $frecuencias = $frecuencia->listar();
@@ -25,18 +23,8 @@ $resultado = array("suceed" => false);
 $cuotas = $frecuencias['data'][0]['frecuencia'] * $plazos['data'][0]['nombre'];
 if (isset($_POST['submit'])) {
     $data = $_POST;
-    unset($data['submit']);
-    unset($data['disponible']);
-    unset($data['costo']);
-    unset($data['valor']);
-    unset($data['sel_producto']);
-    unset($data['sel_cantidad']);
-    unset($data['producto']);
-    unset($data['cantidad']);
-    unset($data['medio_pago_id']);
-    unset($data['fecha_inicio_cobro']);
+    unset($data['submit'], $data['disponible'], $data['costo'], $data['valor'], $data['sel_producto'], $data['sel_cantidad'], $data['producto'], $data['cantidad'], $data['medio_pago_id'], $data['fecha_inicio_cobro']);
     $resultado = $contrato->emitirContrato($data, $_POST['producto'], $_POST['cantidad'], $_POST['costo'], $_POST['medio_pago_id'], $_POST['cuotas'], $_POST['fecha_inicio_cobro']);
-    //$resultado = $contrato->emitirContrato($contrato,$detalle);
 }
 // </editor-fold>
 ?>
