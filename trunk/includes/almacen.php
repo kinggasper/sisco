@@ -26,7 +26,7 @@ class almacen extends db implements crud {
             }
         }
         $temp = $this->ver($id);
-        $this->log("Almacen {$temp['id']}:{$temp['nombre']} borrado con exito");
+        $this->log("Almacen {$temp['data'][0]['id']}:{$temp['data'][0]['nombre']} borrado con exito");
         $result = $this->delete(self::tabla, array("id" => $id));
         return $result;
     }
@@ -38,8 +38,8 @@ class almacen extends db implements crud {
     }
 
     public function ver($id) {
-        return $this->dame_query("select almacen.id, almacen.nombre nombre, ifnull(cantidad,0) cantidad from almacen 
-        left outer join producto_almacen on almacen.id = producto_almacen.almacen_id where almacen.id =" . $id);
+        return $this->dame_query("select almacen.id, almacen.nombre nombre from almacen 
+        where id =" . $id);
     }
 
     public function listar() {
@@ -87,7 +87,7 @@ on duplicate key update cantidad = cantidad + {$cantidad[$i]};");
             }
             $this->exec_query("commit");
             $almacen_temp = $this->ver($almacen);
-            $this->log("Orden de compra realizada para almacen {$almacen_temp['id']}:{$almacen_temp['nombre']}.");
+            $this->log("Orden de compra realizada para almacen {$almacen_temp['data'][0]['id']}:{$almacen_temp['data'][0]['nombre']}.");
             return $resultado;
         } catch (Exception $exc) {
             $this->exec_query("rollback");
@@ -123,7 +123,10 @@ on duplicate key update cantidad = cantidad + {$cantidad[$i]};");
             $resultado = $this->traspaso($producto, $almacen_origen, $almacen_destino, $cantidad);
             $temp_almacen_origen = $this->ver($almacen_origen);
             $temp_almacen_destino = $this->ver($almacen_destino);
-            $this->log("Traspaso realizado desde almacen {$temp_almacen_origen['id']}:{$temp_almacen_origen['nombre']} a {$temp_almacen_destino['id']}:{$temp_almacen_destino['id']}:{$temp_almacen_destino['nombre']} ");
+            $this->log("Traspaso realizado  
+                    desde almacen {$temp_almacen_origen['data'][0]['id']}:{$temp_almacen_origen['data'][0]['nombre']} 
+                    a {$temp_almacen_destino['data'][0]['id']}:{$temp_almacen_destino['data'][0]['nombre']} 
+                    ");
             return $resultado;
         }
         // </editor-fold>
