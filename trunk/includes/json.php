@@ -18,14 +18,14 @@ switch ($_GET['accion']) {
         break;
     case 'agregar_medio_pago':
         $medio_pago = new mediopago();
-        if ($_GET['tipo_medio_pago_id']==1) {
-            $data=Array("tipo_medio_pago_id"=>$_GET['tipo_medio_pago_id'],
-                "usuario_id"=>$_GET['usuario_id']);
+        if ($_GET['tipo_medio_pago_id'] == 1) {
+            $data = Array("tipo_medio_pago_id" => $_GET['tipo_medio_pago_id'],
+                "usuario_id" => $_GET['usuario_id']);
         } else {
-            $data = Array("tipo_medio_pago_id"=>$_GET['tipo_medio_pago_id'],
-                "banco_id"=>$_GET['banco_id'],
-                "numero_cuenta"=>$_GET['numero_cuenta'],
-                "usuario_id"=>$_GET['usuario_id']);    
+            $data = Array("tipo_medio_pago_id" => $_GET['tipo_medio_pago_id'],
+                "banco_id" => $_GET['banco_id'],
+                "numero_cuenta" => $_GET['numero_cuenta'],
+                "usuario_id" => $_GET['usuario_id']);
         }
         $result = $medio_pago->insertar($data);
         break;

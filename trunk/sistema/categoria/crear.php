@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
                             <h3>Ayuda</h3>
                             <p>Ingrese los datos para crear una categoria</p>
                         </div>
-                        <div class="span12">
+                        <div class="span16">
                             <form method="post" action="">
                                 <fieldset>
                                     <legend>Datos de la categoria</legend>

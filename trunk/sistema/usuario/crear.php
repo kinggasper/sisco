@@ -10,7 +10,6 @@ if (isset($_POST['submit'])) {
     unset($data['submit']);
     unset($data['clave2']);
     $resultado = $usuario->insertar($data);
-    var_dump($resultado);
 }
 // </editor-fold>
 ?>
@@ -70,7 +69,7 @@ if (isset($_POST['submit'])) {
                             <h3>Ayuda</h3>
                             <p>Ingrese los datos para crear un usuario</p>
                         </div>
-                        <div class="span12">
+                        <div class="span16">
                             <form method="post" action="">
                                 <input type="hidden" name="empresa_id" value="<?php echo $_SESSION['usuario']['empresa_id']; ?>"/>
                                 <fieldset>

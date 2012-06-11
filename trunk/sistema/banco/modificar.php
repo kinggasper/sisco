@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
                             <h3>Ayuda</h3>
                             <p>Ingrese los datos para modificar un banco</p>
                         </div>
-                        <div class="span12">
+                        <div class="span16">
                             <?php if ($registro['suceed'] && count($registro['data']) > 0): ?>
                                 <form method="post" action="">
                                     <?php $dato = $registro['data'][0]; ?>

@@ -63,7 +63,7 @@ if (isset($_POST['submit'])) {
                             <p>Ingrese los datos para modificar un Vendedor</p>
                         </div>
                         
-                        <div class="span12">
+                        <div class="span16">
                             <?php if ($registro['suceed'] && count($registro['data']) > 0): ?>
                                 <form method="post" action="">
                                     <?php $dato = $registro['data'][0]; ?>
@@ -113,6 +113,12 @@ if (isset($_POST['submit'])) {
                                         <label for="numero_cuenta">Dirección:</label>
                                         <div class="input">
                                             <input type="text" name="direccion" id="direccion" value="<?php echo $dato['direccion']; ?>"/>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix">
+                                        <label for="comision">Comisión:</label>
+                                        <div class="input">
+                                            <input type="text" name="comision" id="comision" class="required digits" value="<?php echo $dato['comision']; ?>"/>
                                         </div>
                                     </div>
                                 </fieldset>

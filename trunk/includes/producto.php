@@ -24,7 +24,7 @@ class producto extends db implements crud {
 
     public function insertar($data) {
         $result = $this->insert(self::tabla, $data);
-        $this->log("Prodcuto {$result['insert_id']}:{$data['nombre']} creado");
+        $this->log("Producto {$result['insert_id']}:{$data['nombre']} creado");
         return $result;
     }
 
