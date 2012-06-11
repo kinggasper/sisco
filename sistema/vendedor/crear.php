@@ -59,7 +59,7 @@ if (isset($_POST['submit'])) {
                             <h3>Ayuda</h3>
                             <p>Ingrese los datos para crear un Vendedor</p>
                         </div>
-                        <div class="span12">
+                        <div class="span16">
                             <form method="post" action="">
                                 <input type="hidden" name="empresa_id" value="<?php echo $_SESSION['usuario']['empresa_id']; ?>"/>
                                 <fieldset>
@@ -92,6 +92,12 @@ if (isset($_POST['submit'])) {
                                         <label for="numero_cuenta">Dirección:</label>
                                         <div class="input">
                                             <input type="text" name="direccion" id="direccion" />
+                                        </div>
+                                    </div>
+                                    <div class="clearfix">
+                                        <label for="comision">Comisión:</label>
+                                        <div class="input">
+                                            <input type="text" name="comision" id="comision" class="required digits" />
                                         </div>
                                     </div>
                                 </fieldset>

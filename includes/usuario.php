@@ -132,5 +132,4 @@ on duplicate key update tipo_usuario_id = {$tipo_usuario};");
     }
 
 }
-
 ?>

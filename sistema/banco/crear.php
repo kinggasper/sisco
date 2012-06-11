@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
                             <h3>Ayuda</h3>
                             <p>Ingrese los datos para crear un banco</p>
                         </div>
-                        <div class="span12">
+                        <div class="span16">
                             <form method="post" action="">
                                 <fieldset>
                                     <legend>Datos del banco</legend>

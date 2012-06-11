@@ -445,7 +445,8 @@ Class Misc {
     public static function error_handler($num, $err, $file, $line) {
         $headers = 'MIME-Version: 1.0' . "\r\n";
         $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= 'From: BuscoCarro Daemon <info@buscocarro.com.ve>' . "\r\n";
+        $headers .= 'From: Error Daemon <info@'.str_replace("www", "", $_SERVER['SERVER_NAME']).">" . "\r\n";
+        
         $html = "";
 
         // <editor-fold defaultstate="collapsed" desc="tipos de errores">
