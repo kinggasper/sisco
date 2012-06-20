@@ -36,6 +36,12 @@ class frecuencia extends db implements crud {
         return $this->select("*", self::tabla, array("id" => $id));
     }
 
+    public function listar_por_organismo($organismo) {
+        $result = $this->dame_query("select frecuencia.* from frecuencia 
+                inner join organismo_frecuencia on frecuencia.id = organismo_frecuencia.frecuencia_id
+                and organismo_id = " . $organismo);
+        return $result;
+    }
 }
 
 ?>

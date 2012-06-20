@@ -32,7 +32,21 @@ class organismo extends db implements crud {
     }
 
     public function listar() {
-        return $this->dame_query("select id, nombre from " . self::tabla);
+        $result = $this->dame_query("select id, nombre from " . self::tabla);
+        return $result;
+    }
+
+    public function configurar_frecuencias($organismo, $frecuencias) {
+        if (is_numeric($organismo)) {
+            $borrar_frecuencias = $this->delete("organismo_frecuencia", array("organismo_id" => $organismo));
+            if ($borrar_frecuencias['suceed']) {
+                foreach ($frecuencias as $frecuencia) {
+                    $this->insert("organismo_frecuencia", array(
+                        "organismo_id" => $organismo,
+                        "frecuencia_id" => $frecuencia));
+                }
+            }
+        }
     }
 
 }
