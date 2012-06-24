@@ -12,6 +12,10 @@ switch ($_GET['accion']) {
         $cliente = new cliente();
         $result = $cliente->clientes_por_organismo($_GET['organismo']);
         break;
+    case 'frecuencias_organismo':
+        $frecuencia = new frecuencia();
+        $result = $frecuencia->listar_por_organismo($_GET['organismo']);
+        break;
     case 'producto_existencia':
         $producto = new producto();
         $result = $producto->disponible($_GET['id']);

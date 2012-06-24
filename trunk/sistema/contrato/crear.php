@@ -14,6 +14,7 @@ $banco = new banco();
 
 $vendedores = $vendedor->vendedor_por_empresa($_SESSION['usuario']['empresa_id']);
 $organismos = $organismo->listar();
+//TODO dinamizar esto
 $frecuencias = $frecuencia->listar();
 $productos = $producto->productosConExistencia();
 $tipo_medio_pago = $medio_pago->listar_tipo_medio_pagos();
@@ -69,7 +70,6 @@ if (isset($_POST['submit'])) {
                     }
                 });
                 $("#tipo_medio_pago_id").change(function() {
-                    
                     if($(this).val()=="1"){
                         $("#banco_id").removeClass("required");
                         $("#numero_cuenta").removeClass("required");
@@ -86,7 +86,7 @@ if (isset($_POST['submit'])) {
                     function(data){
                         if(data.suceed) {
                             $("#medio_pago_id option").remove();
-                            $("<option value=\"\">&nbsp;</option>").appendTo("#medio_pago_id");
+                            $("<option value=\"\">Seleccione</option>").appendTo("#medio_pago_id");
                             for(var elemento in data.data){
                                 if( typeof data.data[elemento] == "object"){
                                     $("<option value='"+ data.data[elemento].id + "'>"+ data.data[elemento].medio_pago  +"</option>")
@@ -97,6 +97,7 @@ if (isset($_POST['submit'])) {
                     });
                 });
                 $("#organismo_id").change(function(){
+                    //Clientes x organismo
                     $.getJSON('<?php echo ROOT; ?>/includes/json.php', {accion:'clientes_organismo', organismo:$(this).val()}, function(data){
                         $("#cliente_id option").remove();
                         $("#medio_pago_id option").remove();
@@ -110,7 +111,20 @@ if (isset($_POST['submit'])) {
                                 }
                             }
                         }
-                    })
+                    });
+                    //Frecuencias x organismo
+                    $.getJSON('<?php echo ROOT; ?>/includes/json.php', {accion:'frecuencias_organismo', organismo:$(this).val()}, function(data){
+                        $("#frecuencia_id option").remove();
+                        if(data.suceed){
+                            $("<option value=\"\">Seleccione Frecuencia</option>").appendTo("#frecuencia_id");
+                            for(var elemento in data.data){
+                                if( typeof data.data[elemento] == "object"){
+                                    $("<option value='"+ data.data[elemento].id + "'>"+ data.data[elemento].nombre +"</option>")
+                                    .appendTo("#frecuencia_id");
+                                }
+                            }
+                        }
+                    });
                 });
                 $("#plazo_id, #frecuencia_id").change(function(){
                     $.getJSON('<?php echo ROOT; ?>/includes/json.php', 
@@ -259,6 +273,31 @@ if (isset($_POST['submit'])) {
                                         <li><a href="#fragment-2"><span>Productos</span></a></li>
                                     </ul>
                                     <div id="fragment-1">
+                                        <!-- Cliente-->
+                                        <fieldset>
+                                            <legend>Cliente</legend>
+                                            <div class="clearfix">
+                                                <label for="organismo_id">Organismo:<sup>*</sup></label>
+                                                <div class="input">
+                                                    <select name="organismo_id" id="organismo_id" class="required">
+                                                        <option value="">Seleccione</option>
+                                                        <?php foreach ($organismos['data'] as $valor): ?>
+                                                            <option value="<?php echo $valor['id']; ?>"><?php echo $valor['nombre'] ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="clearfix">
+                                                <label for="cliente_id">Cliente:<sup>*</sup></label>
+                                                <div class="input">
+                                                    <select name="cliente_id" id="cliente_id" class="required">
+                                                        <option value="">Seleccione un organismo</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <!-- Contrato -->
                                         <fieldset>
                                             <legend>Contrato</legend>
                                             <div class="clearfix">
@@ -271,9 +310,10 @@ if (isset($_POST['submit'])) {
                                                 <label for="frecuencia">Frecuencia:<sup>*</sup></label>
                                                 <div class="input">
                                                     <select name="frecuencia_id" id="frecuencia_id" class="required">
-                                                        <?php foreach ($frecuencias['data'] as $valor): ?>
+                                                        <option>Seleccione un Organismo</option>
+                                                        <?php /*foreach ($frecuencias['data'] as $valor): ?>
                                                             <option value="<?php echo $valor['id']; ?>"><?php echo $valor['nombre'] ?></option>
-                                                        <?php endforeach; ?>
+                                                        <?php endforeach; */ ?>
                                                     </select>
                                                 </div>
                                             </div>
@@ -300,28 +340,7 @@ if (isset($_POST['submit'])) {
                                                 </div>
                                             </div>
                                         </fieldset>
-                                        <fieldset>
-                                            <legend>Cliente</legend>
-                                            <div class="clearfix">
-                                                <label for="organismo_id">Organismo:<sup>*</sup></label>
-                                                <div class="input">
-                                                    <select name="organismo_id" id="organismo_id" class="required">
-                                                        <option value="">Seleccione</option>
-                                                        <?php foreach ($organismos['data'] as $valor): ?>
-                                                            <option value="<?php echo $valor['id']; ?>"><?php echo $valor['nombre'] ?></option>
-                                                        <?php endforeach; ?>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="clearfix">
-                                                <label for="cliente_id">Cliente:<sup>*</sup></label>
-                                                <div class="input">
-                                                    <select name="cliente_id" id="cliente_id" class="required">
-                                                        <option value="">Seleccione un organismo</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </fieldset>
+                                        <!-- Vendedor -->
                                         <fieldset>
                                             <legend>Vendedor</legend>
                                             <div class="clearfix">
@@ -337,6 +356,7 @@ if (isset($_POST['submit'])) {
 
                                             </div>
                                         </fieldset>
+                                        <!-- Medio de Pago-->
                                         <fieldset>
                                             <legend>Medio de Pago</legend>
                                             <div class="clearfix">
