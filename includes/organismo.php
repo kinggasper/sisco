@@ -37,16 +37,18 @@ class organismo extends db implements crud {
     }
 
     public function configurar_frecuencias($organismo, $frecuencias) {
+        $result['suceed'] = false;
         if (is_numeric($organismo)) {
-            $borrar_frecuencias = $this->delete("organismo_frecuencia", array("organismo_id" => $organismo));
+            $borrar_frecuencias = $this->delete("frecuencia_organismo", array("organismo_id" => $organismo));
             if ($borrar_frecuencias['suceed']) {
                 foreach ($frecuencias as $frecuencia) {
-                    $this->insert("organismo_frecuencia", array(
+                    $result = $this->insert("frecuencia_organismo", array(
                         "organismo_id" => $organismo,
                         "frecuencia_id" => $frecuencia));
                 }
             }
         }
+        return $result;
     }
 
 }

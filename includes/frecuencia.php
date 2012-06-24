@@ -38,7 +38,7 @@ class frecuencia extends db implements crud {
 
     public function listar_por_organismo($organismo) {
         $result = $this->dame_query("select frecuencia.* from frecuencia 
-                inner join organismo_frecuencia on frecuencia.id = organismo_frecuencia.frecuencia_id
+                inner join frecuencia_organismo on frecuencia.id = frecuencia_organismo.frecuencia_id
                 and organismo_id = " . $organismo);
         return $result;
     }

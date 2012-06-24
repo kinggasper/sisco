@@ -86,6 +86,7 @@ if (isset($_POST['submit'])) {
                                     <fieldset>
                                         <div class="actions">
                                             <input class="btn primary" type="submit" name="submit" value="Modificar"/>
+                                            <a class="btn info" href="organismo_frecuencia.php?id=<?php echo $dato['id']; ?>">Configurar Frecuencias</a>
                                             <input class="btn" type="reset" name="reset" value="Borrar"/>
                                         </div>
                                     </fieldset>
