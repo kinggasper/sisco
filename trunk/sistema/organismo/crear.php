@@ -51,6 +51,7 @@ if (isset($_POST['submit'])) {
                         <a class="close" href="#">×</a>
                         <p>Organismo creado con <strong>&Eacute;xito.</strong></p>
                         <a class="btn small primary" href="listar.php">Volver al listado.</a>
+                        <a class="btn small info" href="organismo_frecuencia.php?id=<?php echo $resultado['insert_id']; ?>">Configurar Frecuencias</a>
                         <a class="btn small" href="../usuario">Volver al men&uacute;.</a>
                     </div>
                 <?php else: ?>

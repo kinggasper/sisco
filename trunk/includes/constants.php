@@ -17,7 +17,7 @@ if ($_SERVER['SERVER_NAME'] == "www.inverelturco.com" | $_SERVER['SERVER_NAME'] 
     $db = "asgmul_sisco";
     $email_error = true;
     $mostrar_error = false;
-    $debug = true;
+    $debug = false;
     $sistema = "";
 } else {
     $user = "root";

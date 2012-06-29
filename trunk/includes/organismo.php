@@ -37,6 +37,11 @@ class organismo extends db implements crud {
     }
 
     public function configurar_frecuencias($organismo, $frecuencias) {
+        $organismo_temp = $this->ver($organismo);
+        $nombre = "";
+        if (count($organismo_temp['data']) > 0) {
+            $nombre = $organismo_temp['data'][0]['nombre'];
+        }
         $result['suceed'] = false;
         if (is_numeric($organismo)) {
             $borrar_frecuencias = $this->delete("frecuencia_organismo", array("organismo_id" => $organismo));
@@ -48,6 +53,7 @@ class organismo extends db implements crud {
                 }
             }
         }
+        $this->log("Configuracion de frecuencias para organismo $organismo: $nombre.");
         return $result;
     }
 
