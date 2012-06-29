@@ -8,7 +8,7 @@ $query = "select * from organismo";
 if (isset($_GET['filtrar'])) {
     $query.=" where organismo.nombre like '%{$_GET['filtrar']}%'";
 }
-$pag->paginar($query, 5);
+$pag->paginar($query, 20);
 // </editor-fold>
 ?>
 <!DOCTYPE html>
